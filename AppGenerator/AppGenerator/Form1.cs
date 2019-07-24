@@ -19,7 +19,7 @@ namespace AppGenerator
             InitializeComponent();
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void GenerateButton(object sender, EventArgs e)
         {
             string generatedHtmlString = string.Empty;
 
