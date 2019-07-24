@@ -54,7 +54,7 @@ namespace AppGenerator
             #region Izmena csproj fajla
             string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
             string csprojEdited = File.ReadAllText(csprojPath);
-            if (csprojEdited.Contains(@"<Content Include = ""base.html""") == false) //zakucan base.html
+            if (csprojEdited.Contains(@"<Content Include=""base.html""") == false) //zakucan base.html
             {
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
                 csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""base.html""" + " />" + Environment.NewLine + "\t"); //zakucan base.html
