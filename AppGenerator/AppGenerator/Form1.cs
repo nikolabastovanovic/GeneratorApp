@@ -42,7 +42,8 @@ namespace AppGenerator
                 writer.RenderEndTag(); //end title
                 writer.WriteLine();
 
-                writer.AddAttribute("rel", "stylesheet");
+                writer.AddAttribute(HtmlTextWriterAttribute.Rel, "stylesheet");
+                writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
                 writer.AddAttribute(HtmlTextWriterAttribute.Href, "HelpCSS.css");
                 writer.RenderBeginTag(HtmlTextWriterTag.Link);
                 writer.RenderEndTag(); //end link
