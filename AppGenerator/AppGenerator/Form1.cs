@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows.Forms;
@@ -21,13 +22,6 @@ namespace AppGenerator
 
         private void GenerateButton(object sender, EventArgs e)
         {
-            //TextBox textbox = new TextBox();
-            
-            //textbox.Location = new System.Drawing.Point(10, 25 * 1);
-            //textbox.Size = new System.Drawing.Size(80, 20);
-            //textbox.Name = "txt_" + (1);
-            //this.Controls.Add(textbox);
-
             string generatedHtmlString = string.Empty;
 
             StringBuilder sb = new StringBuilder("<!DOCTYPE html>" + Environment.NewLine);
@@ -36,6 +30,23 @@ namespace AppGenerator
 
             using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
             {
+                int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
+                string[] pageNames = new string[countComas + 1];
+
+                for (int i = 0; i < pageNames.Length; i++)
+                {
+                    string pageName = string.Empty;
+                    if (txtPageNames.Text.Contains(",") == true)
+                    {
+                        pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
+                        txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+                    }
+                    else
+                        pageName = txtPageNames.Text;
+
+                    pageNames[i] = pageName.Trim();
+                }
+
                 writer.RenderBeginTag(HtmlTextWriterTag.Html);
                 writer.RenderBeginTag(HtmlTextWriterTag.Head);
 
