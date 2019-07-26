@@ -12,15 +12,22 @@ using System.Windows.Forms;
 
 namespace AppGenerator
 {
-    public partial class Form1 : Form
+    public partial class FormName : Form
     {
-        public Form1()
+        public FormName()
         {
             InitializeComponent();
         }
 
         private void GenerateButton(object sender, EventArgs e)
         {
+            //TextBox textbox = new TextBox();
+            
+            //textbox.Location = new System.Drawing.Point(10, 25 * 1);
+            //textbox.Size = new System.Drawing.Size(80, 20);
+            //textbox.Name = "txt_" + (1);
+            //this.Controls.Add(textbox);
+
             string generatedHtmlString = string.Empty;
 
             StringBuilder sb = new StringBuilder("<!DOCTYPE html>" + Environment.NewLine);

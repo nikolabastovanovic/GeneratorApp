@@ -1,6 +1,6 @@
 ﻿namespace AppGenerator
 {
-    partial class Form1
+    partial class FormName
     {
         /// <summary>
         /// Required designer variable.
@@ -41,13 +41,13 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.GenerateButton);
             // 
-            // Form1
+            // FormName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(402, 389);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "FormName";
             this.Text = "Form1";
             this.ResumeLayout(false);
 
