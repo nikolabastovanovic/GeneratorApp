@@ -81,6 +81,77 @@ namespace AppGenerator
                 writer.RenderEndTag(); //end div
                 writer.WriteLine();
 
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "row");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                writer.Write("About me");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.RenderBeginTag(HtmlTextWriterTag.H5);
+                writer.Write("Photo of me:");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.Write("Image");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.RenderBeginTag(HtmlTextWriterTag.P);
+                writer.Write("Some text");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.Write("Advertisement");
+                writer.RenderEndTag();
+                writer.WriteLine("<br>");
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.Write("Advertisement");
+                writer.RenderEndTag();
+                writer.RenderEndTag(); //end div class side
+                writer.WriteLine();
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "main");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                writer.Write("Title heading 2");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.RenderBeginTag(HtmlTextWriterTag.H5);
+                writer.Write("Title description");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.Write("Image");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.RenderBeginTag(HtmlTextWriterTag.P);
+                writer.Write("Some text");
+                writer.RenderEndTag();
+                writer.WriteLine();
+                writer.RenderBeginTag(HtmlTextWriterTag.P);
+                writer.Write("Some text");
+                writer.RenderEndTag();
+                writer.RenderEndTag(); //end div class main
+
+                writer.RenderEndTag(); //end div class row
+                writer.WriteLine();
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, "footer");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                writer.Write("Footer");
+                writer.RenderEndTag();
+                writer.RenderEndTag(); //end div class footer
+
                 writer.WriteLine();
                 writer.AddAttribute(HtmlTextWriterAttribute.Src, "JavaScript.js");
                 writer.RenderBeginTag(HtmlTextWriterTag.Script);
@@ -269,49 +340,6 @@ body {
   text-align: center;
   background: #ddd;
 }";
-
-        /*
-         
-        <div class="navbar">
-        <a href="#">Link</a>
-        <a href="#">Link</a>
-        <a href="#">Link</a>
-        <a href="#" class="right">Link</a>
-    </div>
-
-    <div class="row">
-        <div class="side">
-            <h2>About Me</h2>
-            <h5>Photo of me:</h5>
-            <div class="fakeimg" style="height:200px;">Image</div>
-            <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
-            <h3>More Text</h3>
-            <p>Lorem ipsum dolor sit ame.</p>
-            <div class="fakeimg" style="height:60px;">Image</div><br>
-            <div class="fakeimg" style="height:60px;">Image</div><br>
-            <div class="fakeimg" style="height:60px;">Image</div>
-        </div>
-        <div class="main">
-            <h2>TITLE HEADING</h2>
-            <h5>Title description, Dec 7, 2017</h5>
-            <div class="fakeimg" style="height:200px;">Image</div>
-            <p>Some text..</p>
-            <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-            <br>
-            <h2>TITLE HEADING</h2>
-            <h5>Title description, Sep 2, 2017</h5>
-            <div class="fakeimg" style="height:200px;">Image</div>
-            <p>Some text..</p>
-            <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-        </div>
-    </div>
-
-    <div class="footer">
-        <h2>Footer</h2>
-    </div>
-         
-         */
-
 
     }
 }
