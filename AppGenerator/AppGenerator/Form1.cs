@@ -47,135 +47,131 @@ namespace AppGenerator
                     pageNames[i] = pageName.Trim();
                 }
 
-                writer.RenderBeginTag(HtmlTextWriterTag.Html);
-                writer.RenderBeginTag(HtmlTextWriterTag.Head);
+                for (int y = 0; y < pageNames.Length; y++)
+                {
+                    writer.RenderBeginTag(HtmlTextWriterTag.Html);
+                    writer.RenderBeginTag(HtmlTextWriterTag.Head);
 
-                writer.AddAttribute("charset", "utf-8");
-                writer.RenderBeginTag(HtmlTextWriterTag.Meta);
-                writer.RenderEndTag(); //end meta
-                writer.WriteLine();
+                    writer.AddAttribute("charset", "utf-8");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Meta);
+                    writer.RenderEndTag(); //end meta
+                    writer.WriteLine();
 
-                writer.RenderBeginTag(HtmlTextWriterTag.Title);
-                writer.Write("Base.html");
-                writer.RenderEndTag(); //end title
-                writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.Title);
+                    writer.Write("Page Title" + pageNames[y]);
+                    writer.RenderEndTag(); //end title
+                    writer.WriteLine();
 
-                writer.AddAttribute(HtmlTextWriterAttribute.Rel, "stylesheet");
-                writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
-                writer.AddAttribute(HtmlTextWriterAttribute.Href, "HelpCSS.css");
-                writer.RenderBeginTag(HtmlTextWriterTag.Link);
-                writer.RenderEndTag(); //end link
-                writer.RenderEndTag(); //end head
-                writer.WriteLine();
-                
+                    writer.AddAttribute(HtmlTextWriterAttribute.Rel, "stylesheet");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Href, "HelpCSS.css");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Link);
+                    writer.RenderEndTag(); //end link
+                    writer.RenderEndTag(); //end head
+                    writer.WriteLine();
 
-                writer.RenderBeginTag(HtmlTextWriterTag.Body);
 
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "header");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                writer.Write("My WebSite");
-                writer.RenderEndTag(); //end div
-                writer.RenderEndTag(); //end h1
-                writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.Body);
 
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "navbar");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-                writer.RenderBeginTag(HtmlTextWriterTag.A);
-                writer.Write("Link");
-                writer.RenderEndTag(); //end a
-                writer.WriteLine();
-                writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-                writer.RenderBeginTag(HtmlTextWriterTag.A);
-                writer.Write("Link");
-                writer.RenderEndTag(); //end a
-                writer.WriteLine();
-                writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-                writer.RenderBeginTag(HtmlTextWriterTag.A);
-                writer.Write("Link");
-                writer.RenderEndTag(); //end a
-                writer.WriteLine();
-                writer.RenderEndTag(); //end div
-                writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "header");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.RenderBeginTag(HtmlTextWriterTag.H1);
+                    writer.Write("My WebSite");
+                    writer.RenderEndTag(); //end div
+                    writer.RenderEndTag(); //end h1
+                    writer.WriteLine();
 
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "row");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                writer.Write("About me");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.RenderBeginTag(HtmlTextWriterTag.H5);
-                writer.Write("Photo of me:");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.Write("Image");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.RenderBeginTag(HtmlTextWriterTag.P);
-                writer.Write("Some text");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.Write("Advertisement");
-                writer.RenderEndTag();
-                writer.WriteLine("<br>");
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.Write("Advertisement");
-                writer.RenderEndTag();
-                writer.RenderEndTag(); //end div class side
-                writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "navbar");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    for (int menuTabs = 0; menuTabs < pageNames.Length; menuTabs++)
+                    {
+                        writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+                        writer.RenderBeginTag(HtmlTextWriterTag.A);
+                        writer.Write(pageNames[menuTabs]);
+                        writer.RenderEndTag(); //end a
+                        writer.WriteLine();
+                    }
+                    writer.RenderEndTag(); //end div
+                    writer.WriteLine();
 
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "main");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                writer.Write("Title heading 2");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.RenderBeginTag(HtmlTextWriterTag.H5);
-                writer.Write("Title description");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.Write("Image");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.RenderBeginTag(HtmlTextWriterTag.P);
-                writer.Write("Some text");
-                writer.RenderEndTag();
-                writer.WriteLine();
-                writer.RenderBeginTag(HtmlTextWriterTag.P);
-                writer.Write("Some text");
-                writer.RenderEndTag();
-                writer.RenderEndTag(); //end div class main
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "row");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                    writer.Write("About me");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.H5);
+                    writer.Write("Photo of me:");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.Write("Image");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.P);
+                    writer.Write("Some text");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.Write("Advertisement");
+                    writer.RenderEndTag();
+                    writer.WriteLine("<br>");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.Write("Advertisement");
+                    writer.RenderEndTag();
+                    writer.RenderEndTag(); //end div class side
+                    writer.WriteLine();
 
-                writer.RenderEndTag(); //end div class row
-                writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "main");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                    writer.Write("Title heading 2");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.H5);
+                    writer.Write("Title description");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.Write("Image");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.P);
+                    writer.Write("Some text");
+                    writer.RenderEndTag();
+                    writer.WriteLine();
+                    writer.RenderBeginTag(HtmlTextWriterTag.P);
+                    writer.Write("Some text");
+                    writer.RenderEndTag();
+                    writer.RenderEndTag(); //end div class main
 
-                writer.AddAttribute(HtmlTextWriterAttribute.Class, "footer");
-                writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                writer.Write("Footer");
-                writer.RenderEndTag();
-                writer.RenderEndTag(); //end div class footer
+                    writer.RenderEndTag(); //end div class row
+                    writer.WriteLine();
 
-                writer.WriteLine();
-                writer.AddAttribute(HtmlTextWriterAttribute.Src, "JavaScript.js");
-                writer.RenderBeginTag(HtmlTextWriterTag.Script);
-                writer.RenderEndTag(); //end script
-                writer.RenderEndTag(); //end body
-                writer.RenderEndTag(); //end html
+                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "footer");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                    writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                    writer.Write("Footer");
+                    writer.RenderEndTag();
+                    writer.RenderEndTag(); //end div class footer
+
+                    writer.WriteLine();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Src, "JavaScript.js");
+                    writer.RenderBeginTag(HtmlTextWriterTag.Script);
+                    writer.RenderEndTag(); //end script
+                    writer.RenderEndTag(); //end body
+                    writer.RenderEndTag(); //end html
+                }
             }
             generatedHtmlString = stringWriter.ToString();
 
