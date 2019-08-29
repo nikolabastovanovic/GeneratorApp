@@ -22,33 +22,35 @@ namespace AppGenerator
 
         private void GenerateButton(object sender, EventArgs e)
         {
+            int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
+            string[] pageNames = new string[countComas + 1];
+
+            //Uklanjanje praznih karaktera 
+            for (int i = 0; i < pageNames.Length; i++)
+            {
+                string pageName = string.Empty;
+                if (txtPageNames.Text.Contains(",") == true)
+                {
+                    pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
+                    txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+                }
+                else
+                    pageName = txtPageNames.Text;
+
+                pageNames[i] = pageName.Trim();
+            }
+
             string generatedHtmlString = string.Empty;
 
             StringBuilder sb = new StringBuilder("<!DOCTYPE html>" + Environment.NewLine);
 
             StringWriter stringWriter = new StringWriter(sb);
 
-            using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
+            for (int y = 0; y < pageNames.Length; y++)
             {
-                int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
-                string[] pageNames = new string[countComas + 1];
-
-                for (int i = 0; i < pageNames.Length; i++)
+                using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
                 {
-                    string pageName = string.Empty;
-                    if (txtPageNames.Text.Contains(",") == true)
-                    {
-                        pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
-                        txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
-                    }
-                    else
-                        pageName = txtPageNames.Text;
 
-                    pageNames[i] = pageName.Trim();
-                }
-
-                for (int y = 0; y < pageNames.Length; y++)
-                {
                     writer.RenderBeginTag(HtmlTextWriterTag.Html);
                     writer.RenderBeginTag(HtmlTextWriterTag.Head);
 
@@ -85,7 +87,7 @@ namespace AppGenerator
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     for (int menuTabs = 0; menuTabs < pageNames.Length; menuTabs++)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Href, pageNames[menuTabs] + ".html");
                         writer.RenderBeginTag(HtmlTextWriterTag.A);
                         writer.Write(pageNames[menuTabs]);
                         writer.RenderEndTag(); //end a
@@ -172,83 +174,84 @@ namespace AppGenerator
                     writer.RenderEndTag(); //end body
                     writer.RenderEndTag(); //end html
                 }
-            }
-            generatedHtmlString = stringWriter.ToString();
 
-            #region Izmena csproj fajla
-            string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
-            string csprojEdited = File.ReadAllText(csprojPath);
-            int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
-            if (csprojEdited.Contains(@"<Content Include=""base.html""") == false) //zakucan base.html
-            {
-                csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""base.html""" + " />" + Environment.NewLine + "\t"); //zakucan base.html
-                File.WriteAllText(csprojPath, csprojEdited);
-            }
-            if (csprojEdited.Contains(@"<Content Include=""JavaScript.js"" />") == false)
-            {
-                csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""JavaScript.js""" + " />" + Environment.NewLine + "\t"); //zakucan base.html
-                File.WriteAllText(csprojPath, csprojEdited);
-            }
-            if (csprojEdited.Contains(@"<Content Include=""HelpCSS.css"" />") == false)
-            {
-                csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""HelpCSS.css""" + " />" + Environment.NewLine + "\t"); //zakucan base.html
-                File.WriteAllText(csprojPath, csprojEdited);
-            }
-            #endregion
+                generatedHtmlString = stringWriter.ToString();
 
-            #region Kreiranje generisanih fajlova
-            string path = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\base.html";
-            string javaScriptPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\JavaScript.js";
-            string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\HelpCSS.css";
+                #region Izmena csproj fajla
+                string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
+                string csprojEdited = File.ReadAllText(csprojPath);
+                int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+                if (csprojEdited.Contains(@"<Content Include=""base.html""") == false) //zakucan base.html
+                {
+                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageNames[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
+                    File.WriteAllText(csprojPath, csprojEdited);
+                }
+                if (csprojEdited.Contains(@"<Content Include=""JavaScript.js"" />") == false)
+                {
+                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""JavaScript.js""" + " />" + Environment.NewLine + "\t"); //zakucan JavaScript.js
+                    File.WriteAllText(csprojPath, csprojEdited);
+                }
+                if (csprojEdited.Contains(@"<Content Include=""HelpCSS.css"" />") == false)
+                {
+                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""HelpCSS.css""" + " />" + Environment.NewLine + "\t"); //zakucan HelpCSS.css
+                    File.WriteAllText(csprojPath, csprojEdited);
+                }
+                #endregion
 
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    sw.Write(generatedHtmlString);
-                }
-            }
-            else
-            {
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    sw.Write(generatedHtmlString);
-                }
-            }
+                #region Kreiranje generisanih fajlova
+                string path = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\" + pageNames[y] + ".html";
+                string javaScriptPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\JavaScript.js";
+                string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\HelpCSS.css";
 
-            if (File.Exists(javaScriptPath))
-            {
-                File.Delete(javaScriptPath);
-                using (StreamWriter sw = File.CreateText(javaScriptPath))
+                if (File.Exists(path))
                 {
-                    sw.Write(JavaScript);
+                    File.Delete(path);
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.Write(generatedHtmlString);
+                    }
                 }
-            }
-            else
-            {
-                using (StreamWriter sw = File.CreateText(javaScriptPath))
+                else
                 {
-                    sw.Write(JavaScript);
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.Write(generatedHtmlString);
+                    }
                 }
-            }
 
-            if (File.Exists(cssPath))
-            {
-                File.Delete(cssPath);
-                using (StreamWriter sw = File.CreateText(cssPath))
+                if (File.Exists(javaScriptPath))
                 {
-                    sw.Write(CssString);
+                    File.Delete(javaScriptPath);
+                    using (StreamWriter sw = File.CreateText(javaScriptPath))
+                    {
+                        sw.Write(JavaScript);
+                    }
                 }
-            }
-            else
-            {
-                using (StreamWriter sw = File.CreateText(cssPath))
+                else
                 {
-                    sw.Write(CssString);
+                    using (StreamWriter sw = File.CreateText(javaScriptPath))
+                    {
+                        sw.Write(JavaScript);
+                    }
                 }
+
+                if (File.Exists(cssPath))
+                {
+                    File.Delete(cssPath);
+                    using (StreamWriter sw = File.CreateText(cssPath))
+                    {
+                        sw.Write(CssString);
+                    }
+                }
+                else
+                {
+                    using (StreamWriter sw = File.CreateText(cssPath))
+                    {
+                        sw.Write(CssString);
+                    }
+                }
+                #endregion
             }
-            #endregion
         }
 
         public string JavaScript =@"window.onscroll = function () {myFunction()};
