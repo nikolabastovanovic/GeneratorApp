@@ -42,28 +42,28 @@ namespace AppGenerator
 
             string generatedHtmlString = string.Empty;
 
-            StringBuilder sb = new StringBuilder("<!DOCTYPE html>" + Environment.NewLine);
-
-            StringWriter stringWriter = new StringWriter(sb);
-
             for (int y = 0; y < pageNames.Length; y++)
             {
+                //Mora biti u petlji kako se kod ne bi ponavljao i kreirao sve vise puta..
+                StringBuilder sb = new StringBuilder("<!DOCTYPE html>" + Environment.NewLine);
+                StringWriter stringWriter = new StringWriter(sb);
+
                 using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
                 {
-
+                    
                     writer.RenderBeginTag(HtmlTextWriterTag.Html);
                     writer.RenderBeginTag(HtmlTextWriterTag.Head);
-
+                    
                     writer.AddAttribute("charset", "utf-8");
                     writer.RenderBeginTag(HtmlTextWriterTag.Meta);
                     writer.RenderEndTag(); //end meta
                     writer.WriteLine();
-
+                    
                     writer.RenderBeginTag(HtmlTextWriterTag.Title);
                     writer.Write("Page Title" + pageNames[y]);
                     writer.RenderEndTag(); //end title
                     writer.WriteLine();
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Rel, "stylesheet");
                     writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
                     writer.AddAttribute(HtmlTextWriterAttribute.Href, "HelpCSS.css");
@@ -71,10 +71,10 @@ namespace AppGenerator
                     writer.RenderEndTag(); //end link
                     writer.RenderEndTag(); //end head
                     writer.WriteLine();
-
-
+                    
+                    
                     writer.RenderBeginTag(HtmlTextWriterTag.Body);
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "header");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H1);
@@ -82,7 +82,7 @@ namespace AppGenerator
                     writer.RenderEndTag(); //end div
                     writer.RenderEndTag(); //end h1
                     writer.WriteLine();
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "navbar");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     for (int menuTabs = 0; menuTabs < pageNames.Length; menuTabs++)
@@ -95,7 +95,7 @@ namespace AppGenerator
                     }
                     writer.RenderEndTag(); //end div
                     writer.WriteLine();
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "row");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
@@ -131,7 +131,7 @@ namespace AppGenerator
                     writer.RenderEndTag();
                     writer.RenderEndTag(); //end div class side
                     writer.WriteLine();
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "main");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H2);
@@ -156,17 +156,17 @@ namespace AppGenerator
                     writer.Write("Some text");
                     writer.RenderEndTag();
                     writer.RenderEndTag(); //end div class main
-
+                    
                     writer.RenderEndTag(); //end div class row
                     writer.WriteLine();
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "footer");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H2);
                     writer.Write("Footer");
                     writer.RenderEndTag();
                     writer.RenderEndTag(); //end div class footer
-
+                    
                     writer.WriteLine();
                     writer.AddAttribute(HtmlTextWriterAttribute.Src, "JavaScript.js");
                     writer.RenderBeginTag(HtmlTextWriterTag.Script);
@@ -178,10 +178,10 @@ namespace AppGenerator
                 generatedHtmlString = stringWriter.ToString();
 
                 #region Izmena csproj fajla
-                string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
+                string csprojPath = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\GeneratedApp.csproj";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
-                if (csprojEdited.Contains(@"<Content Include=""base.html""") == false) //zakucan base.html
+                if (csprojEdited.Contains(@"<Content Include="""+ pageNames[y] + ".html\"") == false) //zakucan base.html
                 {
                     csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageNames[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
                     File.WriteAllText(csprojPath, csprojEdited);
@@ -199,9 +199,9 @@ namespace AppGenerator
                 #endregion
 
                 #region Kreiranje generisanih fajlova
-                string path = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\" + pageNames[y] + ".html";
-                string javaScriptPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\JavaScript.js";
-                string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\HelpCSS.css";
+                string path = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\" + pageNames[y] + ".html";
+                string javaScriptPath = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\JavaScript.js";
+                string cssPath = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\HelpCSS.css";
 
                 if (File.Exists(path))
                 {
@@ -251,6 +251,7 @@ namespace AppGenerator
                     }
                 }
                 #endregion
+                generatedHtmlString = "";
             }
         }
 
