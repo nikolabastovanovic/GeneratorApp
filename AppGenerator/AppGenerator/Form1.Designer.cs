@@ -1,6 +1,6 @@
 ﻿namespace AppGenerator
 {
-    partial class FormName
+    partial class FormGenerator
     {
         /// <summary>
         /// Required designer variable.
@@ -30,6 +30,7 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.txtPageNames = new System.Windows.Forms.TextBox();
+            this.comboBoxPagesCollection = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1
@@ -46,17 +47,27 @@
             // 
             this.txtPageNames.Location = new System.Drawing.Point(12, 12);
             this.txtPageNames.Name = "txtPageNames";
-            this.txtPageNames.Size = new System.Drawing.Size(150, 20);
+            this.txtPageNames.Size = new System.Drawing.Size(200, 20);
             this.txtPageNames.TabIndex = 1;
             // 
-            // FormName
+            // comboBoxPagesCollection
+            // 
+            this.comboBoxPagesCollection.FormattingEnabled = true;
+            this.comboBoxPagesCollection.Location = new System.Drawing.Point(12, 48);
+            this.comboBoxPagesCollection.Name = "comboBoxPagesCollection";
+            this.comboBoxPagesCollection.Size = new System.Drawing.Size(200, 21);
+            this.comboBoxPagesCollection.TabIndex = 2;
+            this.comboBoxPagesCollection.SelectedIndexChanged += new System.EventHandler(this.ComboBoxPagesCollection_SelectedIndexChanged);
+            // 
+            // FormGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(402, 389);
+            this.Controls.Add(this.comboBoxPagesCollection);
             this.Controls.Add(this.txtPageNames);
             this.Controls.Add(this.button1);
-            this.Name = "FormName";
+            this.Name = "FormGenerator";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -67,6 +78,7 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox txtPageNames;
+        private System.Windows.Forms.ComboBox comboBoxPagesCollection;
     }
 }
 

@@ -13,17 +13,21 @@ using System.Windows.Forms;
 
 namespace AppGenerator
 {
-    public partial class FormName : Form
+    public partial class FormGenerator : Form
     {
-        public FormName()
+        public FormGenerator()
         {
             InitializeComponent();
+            comboBoxPagesCollection.Text = "Choose page to add content..";
+            comboBoxPagesCollection.Enabled = false;
         }
 
         private void GenerateButton(object sender, EventArgs e)
         {
+            string pages = txtPageNames.Text;
             int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
             string[] pageNames = new string[countComas + 1];
+            comboBoxPagesCollection.Enabled = true;
 
             //Uklanjanje praznih karaktera 
             for (int i = 0; i < pageNames.Length; i++)
@@ -33,12 +37,17 @@ namespace AppGenerator
                 {
                     pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
                     txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+                    comboBoxPagesCollection.Items.Add(pageName.Trim());
                 }
                 else
+                {
                     pageName = txtPageNames.Text;
+                    comboBoxPagesCollection.Items.Add(pageName.Trim());
+                }
 
                 pageNames[i] = pageName.Trim();
             }
+            txtPageNames.Text = pages;
 
             string generatedHtmlString = string.Empty;
 
@@ -178,7 +187,7 @@ namespace AppGenerator
                 generatedHtmlString = stringWriter.ToString();
 
                 #region Izmena csproj fajla
-                string csprojPath = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\GeneratedApp.csproj";
+                string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
                 if (csprojEdited.Contains(@"<Content Include="""+ pageNames[y] + ".html\"") == false) //zakucan base.html
@@ -199,9 +208,9 @@ namespace AppGenerator
                 #endregion
 
                 #region Kreiranje generisanih fajlova
-                string path = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\" + pageNames[y] + ".html";
-                string javaScriptPath = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\JavaScript.js";
-                string cssPath = @"C:\Users\Johny\GeneratedApp\GeneratedApp\GeneratedApp\HelpCSS.css";
+                string path = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\" + pageNames[y] + ".html";
+                string javaScriptPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\JavaScript.js";
+                string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\HelpCSS.css";
 
                 if (File.Exists(path))
                 {
@@ -359,5 +368,15 @@ body {
   background: #ddd;
 }";
 
+        private void ComboBoxPagesCollection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string a = comboBoxPagesCollection.SelectedItem.ToString();
+
+            TextBox txtBox = new TextBox();
+            txtBox.Name = "txt" + a + "Content";
+            txtBox.Multiline = true;
+            txtBox.Text = a;
+            this.Controls.Add(txtBox);
+        }
     }
 }
