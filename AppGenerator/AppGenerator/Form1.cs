@@ -27,7 +27,6 @@ namespace AppGenerator
             string pages = txtPageNames.Text;
             int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
             string[] pageNames = new string[countComas + 1];
-            comboBoxPagesCollection.Enabled = true;
 
             //Uklanjanje praznih karaktera 
             for (int i = 0; i < pageNames.Length; i++)
@@ -37,12 +36,10 @@ namespace AppGenerator
                 {
                     pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
                     txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
-                    comboBoxPagesCollection.Items.Add(pageName.Trim());
                 }
                 else
                 {
                     pageName = txtPageNames.Text;
-                    comboBoxPagesCollection.Items.Add(pageName.Trim());
                 }
 
                 pageNames[i] = pageName.Trim();
@@ -370,13 +367,58 @@ body {
 
         private void ComboBoxPagesCollection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string a = comboBoxPagesCollection.SelectedItem.ToString();
+            string choosen = comboBoxPagesCollection.SelectedItem.ToString();
+            //KeyPressEventArgs key = new KeyPressEventArgs((char)Keys.K);
+            //TxtPageNames_KeyPress(null, key);
+            TextBox box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
+            box.Visible = true;
+        }
 
-            TextBox txtBox = new TextBox();
-            txtBox.Name = "txt" + a + "Content";
-            txtBox.Multiline = true;
-            txtBox.Text = a;
-            this.Controls.Add(txtBox);
+        private void TxtPageNames_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
+                string[] pageNames = new string[countComas + 1];
+                comboBoxPagesCollection.Enabled = true;
+
+                //Uklanjanje praznih karaktera 
+                for (int i = 0; i < pageNames.Length; i++)
+                {
+                    string pageName = string.Empty;
+                    if (txtPageNames.Text.Contains(",") == true)
+                    {
+                        pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
+                        txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+
+                        comboBoxPagesCollection.Items.Add(pageName.Trim());
+
+                        TextBox txtBox = new TextBox();
+                        txtBox.Name = "txtContent" + pageName.Trim();
+                        txtBox.Multiline = true;
+                        txtBox.Text = pageName.Trim();
+                        txtBox.Location = new Point(12, 65);
+                        txtBox.Size = new Size(378, 178);
+                        txtBox.Visible = false;
+                        this.Controls.Add(txtBox);
+                    }
+                    else
+                    { 
+                        pageName = txtPageNames.Text;
+
+                        comboBoxPagesCollection.Items.Add(pageName.Trim());
+
+                        TextBox txtBox = new TextBox();
+                        txtBox.Name = "txtContent" + pageName.Trim();
+                        txtBox.Multiline = true;
+                        txtBox.Text = pageName.Trim();
+                        txtBox.Location = new Point(12, 65);
+                        txtBox.Size = new Size(378, 178);
+                        txtBox.Visible = false;
+                        this.Controls.Add(txtBox);
+                    }
+                }
+            }
         }
     }
 }

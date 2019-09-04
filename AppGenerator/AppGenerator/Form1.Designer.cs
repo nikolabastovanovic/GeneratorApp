@@ -49,11 +49,12 @@
             this.txtPageNames.Name = "txtPageNames";
             this.txtPageNames.Size = new System.Drawing.Size(200, 20);
             this.txtPageNames.TabIndex = 1;
+            this.txtPageNames.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtPageNames_KeyPress);
             // 
             // comboBoxPagesCollection
             // 
             this.comboBoxPagesCollection.FormattingEnabled = true;
-            this.comboBoxPagesCollection.Location = new System.Drawing.Point(12, 48);
+            this.comboBoxPagesCollection.Location = new System.Drawing.Point(12, 38);
             this.comboBoxPagesCollection.Name = "comboBoxPagesCollection";
             this.comboBoxPagesCollection.Size = new System.Drawing.Size(200, 21);
             this.comboBoxPagesCollection.TabIndex = 2;
