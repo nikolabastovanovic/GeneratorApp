@@ -121,7 +121,12 @@ namespace AppGenerator
                     writer.RenderEndTag();
                     writer.WriteLine();
                     writer.RenderBeginTag(HtmlTextWriterTag.P);
-                    writer.Write("Some text");
+
+                    //Tekst iz generisanog textbox-a
+                    TextBox box = this.Controls.Find("txtContent" + pageNames[y], true).FirstOrDefault() as TextBox;
+                    
+                    writer.Write(box.Text);
+
                     writer.RenderEndTag();
                     writer.WriteLine();
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
