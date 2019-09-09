@@ -56,20 +56,20 @@ namespace AppGenerator
 
                 using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
                 {
-                    
+
                     writer.RenderBeginTag(HtmlTextWriterTag.Html);
                     writer.RenderBeginTag(HtmlTextWriterTag.Head);
-                    
+
                     writer.AddAttribute("charset", "utf-8");
                     writer.RenderBeginTag(HtmlTextWriterTag.Meta);
                     writer.RenderEndTag(); //end meta
                     writer.WriteLine();
-                    
+
                     writer.RenderBeginTag(HtmlTextWriterTag.Title);
                     writer.Write("Page Title" + pageNames[y]);
                     writer.RenderEndTag(); //end title
                     writer.WriteLine();
-                    
+
                     writer.AddAttribute(HtmlTextWriterAttribute.Rel, "stylesheet");
                     writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
                     writer.AddAttribute(HtmlTextWriterAttribute.Href, "HelpCSS.css");
@@ -77,10 +77,10 @@ namespace AppGenerator
                     writer.RenderEndTag(); //end link
                     writer.RenderEndTag(); //end head
                     writer.WriteLine();
-                    
-                    
+
+
                     writer.RenderBeginTag(HtmlTextWriterTag.Body);
-                    
+
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "header");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H1);
@@ -88,7 +88,7 @@ namespace AppGenerator
                     writer.RenderEndTag(); //end div
                     writer.RenderEndTag(); //end h1
                     writer.WriteLine();
-                    
+
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "navbar");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     for (int menuTabs = 0; menuTabs < pageNames.Length; menuTabs++)
@@ -101,48 +101,51 @@ namespace AppGenerator
                     }
                     writer.RenderEndTag(); //end div
                     writer.WriteLine();
-                    
+
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "row");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                    writer.Write("About me");
-                    writer.RenderEndTag();
-                    writer.WriteLine();
-                    writer.RenderBeginTag(HtmlTextWriterTag.H5);
-                    writer.Write("Photo of me:");
-                    writer.RenderEndTag();
-                    writer.WriteLine();
-                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.Write("Image");
-                    writer.RenderEndTag();
-                    writer.WriteLine();
-                    writer.RenderBeginTag(HtmlTextWriterTag.P);
+                    if (checkBoxCreateSideBar.Checked)
+                    {
+                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
+                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                        writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                        writer.Write("About me");
+                        writer.RenderEndTag();
+                        writer.WriteLine();
+                        writer.RenderBeginTag(HtmlTextWriterTag.H5);
+                        writer.Write("Photo of me:");
+                        writer.RenderEndTag();
+                        writer.WriteLine();
+                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                        writer.Write("Image");
+                        writer.RenderEndTag();
+                        writer.WriteLine();
+                        writer.RenderBeginTag(HtmlTextWriterTag.P);
 
-                    //Tekst iz generisanog textbox-a
-                    TextBox box = this.Controls.Find("txtContent" + pageNames[y], true).FirstOrDefault() as TextBox;
-                    
-                    writer.Write(box.Text);
+                        //Tekst iz generisanog textbox-a
+                        TextBox sideTxtBox = this.Controls.Find("txtSideContent" + pageNames[y], true).FirstOrDefault() as TextBox;
 
-                    writer.RenderEndTag();
-                    writer.WriteLine();
-                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.Write("Advertisement");
-                    writer.RenderEndTag();
-                    writer.WriteLine("<br>");
-                    writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                    writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                    writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.Write("Advertisement");
-                    writer.RenderEndTag();
-                    writer.RenderEndTag(); //end div class side
-                    writer.WriteLine();
-                    
+                        writer.Write(sideTxtBox.Text);
+
+                        writer.RenderEndTag();
+                        writer.WriteLine();
+                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                        writer.Write("Advertisement");
+                        writer.RenderEndTag();
+                        writer.WriteLine("<br>");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                        writer.Write("Advertisement");
+                        writer.RenderEndTag();
+                        writer.RenderEndTag(); //end div class side
+                        writer.WriteLine();
+                    }
+
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "main");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H2);
@@ -160,24 +163,26 @@ namespace AppGenerator
                     writer.RenderEndTag();
                     writer.WriteLine();
                     writer.RenderBeginTag(HtmlTextWriterTag.P);
-                    writer.Write("Some text");
+                    //Tekst iz generisanog textbox-a
+                    TextBox mainTxtBox = this.Controls.Find("txtContent" + pageNames[y], true).FirstOrDefault() as TextBox;
+                    writer.Write(mainTxtBox.Text);
                     writer.RenderEndTag();
                     writer.WriteLine();
                     writer.RenderBeginTag(HtmlTextWriterTag.P);
                     writer.Write("Some text");
                     writer.RenderEndTag();
                     writer.RenderEndTag(); //end div class main
-                    
+
                     writer.RenderEndTag(); //end div class row
                     writer.WriteLine();
-                    
+
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "footer");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H2);
                     writer.Write("Footer");
                     writer.RenderEndTag();
                     writer.RenderEndTag(); //end div class footer
-                    
+
                     writer.WriteLine();
                     writer.AddAttribute(HtmlTextWriterAttribute.Src, "JavaScript.js");
                     writer.RenderBeginTag(HtmlTextWriterTag.Script);
@@ -192,7 +197,7 @@ namespace AppGenerator
                 string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
-                if (csprojEdited.Contains(@"<Content Include="""+ pageNames[y] + ".html\"") == false) //zakucan base.html
+                if (csprojEdited.Contains(@"<Content Include=""" + pageNames[y] + ".html\"") == false) //zakucan base.html
                 {
                     csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageNames[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
                     File.WriteAllText(csprojPath, csprojEdited);
@@ -266,7 +271,7 @@ namespace AppGenerator
             }
         }
 
-        public string JavaScript =@"window.onscroll = function () {myFunction()};
+        public string JavaScript = @"window.onscroll = function () {myFunction()};
     var header = document.getElementById(""myHeader"");
     var sticky = header.offsetTop;
     
@@ -373,16 +378,31 @@ body {
         private void ComboBoxPagesCollection_SelectedIndexChanged(object sender, EventArgs e)
         {
             string choosen = comboBoxPagesCollection.SelectedItem.ToString();
+            buttonInsertImage.Visible = true;
             //KeyPressEventArgs key = new KeyPressEventArgs((char)Keys.K);
             //TxtPageNames_KeyPress(null, key);
-            TextBox box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
-            box.Visible = true;
+            if (choosen.Contains("side bar"))
+            {
+                TextBox box = this.Controls.Find("txtSideContent" + choosen.Substring(0, choosen.IndexOf(" ")), true).FirstOrDefault() as TextBox;
+                box.Visible = true;
+                box.BringToFront();
+            }
+            else
+            {
+                TextBox box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
+                box.Visible = true;
+                box.BringToFront();
+            }
         }
 
         private void TxtPageNames_KeyPress(object sender, KeyPressEventArgs e)
         {
+            string initPages = txtPageNames.Text;
             if (e.KeyChar == (char)Keys.Enter)
             {
+                if (checkBoxCreateSideBar.Checked)
+                    CheckBoxCreateSideBar_CheckedChanged(sender, e);
+
                 int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
                 string[] pageNames = new string[countComas + 1];
                 comboBoxPagesCollection.Enabled = true;
@@ -396,7 +416,8 @@ body {
                         pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
                         txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
 
-                        comboBoxPagesCollection.Items.Add(pageName.Trim());
+                        if (comboBoxPagesCollection.Items.Contains(pageName.Trim()) == false)
+                            comboBoxPagesCollection.Items.Add(pageName.Trim());
 
                         TextBox txtBox = new TextBox();
                         txtBox.Name = "txtContent" + pageName.Trim();
@@ -408,10 +429,11 @@ body {
                         this.Controls.Add(txtBox);
                     }
                     else
-                    { 
+                    {
                         pageName = txtPageNames.Text;
 
-                        comboBoxPagesCollection.Items.Add(pageName.Trim());
+                        if (comboBoxPagesCollection.Items.Contains(pageName.Trim()) == false)
+                            comboBoxPagesCollection.Items.Add(pageName.Trim());
 
                         TextBox txtBox = new TextBox();
                         txtBox.Name = "txtContent" + pageName.Trim();
@@ -423,7 +445,74 @@ body {
                         this.Controls.Add(txtBox);
                     }
                 }
+                txtPageNames.Text = initPages;
             }
+        }
+
+        private void CheckBoxCreateSideBar_CheckedChanged(object sender, EventArgs e)
+        {
+            string initPages = txtPageNames.Text;
+            int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
+            string[] pageNames = new string[countComas + 1];
+            comboBoxPagesCollection.Enabled = true;
+
+            //Uklanjanje praznih karaktera 
+            for (int i = 0; i < pageNames.Length; i++)
+            {
+                string pageName = string.Empty;
+                if (txtPageNames.Text.Contains(",") == true)
+                {
+                    pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
+                    txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+
+                    if (comboBoxPagesCollection.Items.Contains(pageName.Trim() + " side bar") == false)
+                        comboBoxPagesCollection.Items.Add(pageName.Trim() + " side bar");
+
+                    TextBox txtBox = new TextBox();
+                    txtBox.Name = "txtSideContent" + pageName.Trim();
+                    txtBox.Multiline = true;
+                    txtBox.Text = pageName.Trim() + " side bar content";
+                    txtBox.Location = new Point(12, 65);
+                    txtBox.Size = new Size(378, 178);
+                    txtBox.Visible = false;
+                    this.Controls.Add(txtBox);
+                }
+                else
+                {
+                    pageName = txtPageNames.Text;
+
+                    if (comboBoxPagesCollection.Items.Contains(pageName.Trim() + " side bar") == false)
+                        comboBoxPagesCollection.Items.Add(pageName.Trim() + " side bar");
+
+                    TextBox txtBox = new TextBox();
+                    txtBox.Name = "txtSideContent" + pageName.Trim();
+                    txtBox.Multiline = true;
+                    txtBox.Text = pageName.Trim() + " side bar content";
+                    txtBox.Location = new Point(12, 65);
+                    txtBox.Size = new Size(378, 178);
+                    txtBox.Visible = false;
+                    this.Controls.Add(txtBox);
+                }
+            }
+            txtPageNames.Text = initPages;
+        }
+
+        private void ButtonInsertImage_Click(object sender, EventArgs e)
+        {
+            TextBox box = new TextBox();
+            string choosen = comboBoxPagesCollection.SelectedItem.ToString();
+            if (choosen.Contains("side bar"))
+                box = this.Controls.Find("txtSideContent" + choosen.Substring(0, choosen.IndexOf(" ")), true).FirstOrDefault() as TextBox;
+            else
+                box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
+            string filename = string.Empty;
+            OpenFileDialog openFile = new OpenFileDialog();
+            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = openFile.FileName;
+                filename = Path.GetFileName(filename);
+            }
+            box.Text += "<br> <img src=\"" + filename + "\" height=\"200\" /> <br>";
         }
     }
 }
