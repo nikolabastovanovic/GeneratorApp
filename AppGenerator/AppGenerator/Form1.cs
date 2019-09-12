@@ -373,6 +373,14 @@ body {
   padding: 20px;
   text-align: center;
   background: #ddd;
+}
+
+/*Position in center*/
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
 }";
 
         private void ComboBoxPagesCollection_SelectedIndexChanged(object sender, EventArgs e)
@@ -512,7 +520,12 @@ body {
                 filename = openFile.FileName;
                 filename = Path.GetFileName(filename);
             }
-            box.Text += "<br> <img src=\"" + filename + "\" height=\"200\" /> <br>";
+            box.Text += "<br> <img src=\"" + filename + "\" class=\"center\" /> <br>";
+        }
+
+        private void FormGenerator_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

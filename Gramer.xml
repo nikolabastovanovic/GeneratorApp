@@ -1,0 +1,18 @@
+<gramer>
+	<app_name>MyApp</app_name>
+	<tables>
+		<table>
+			<name>tabela1</name>
+			<columns>
+				<column>kolona1</column>
+				<column>kolona2</column>
+				<column>kolona3</column>
+			</columns>
+		</table>
+	</tables>
+	<pages>
+		<pageName>Home</pageName>
+		<pageName>About us</pageName>
+		<pageName>Contact</pageName>
+	</pages>
+</gramer>
