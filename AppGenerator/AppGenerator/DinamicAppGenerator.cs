@@ -22,17 +22,21 @@ namespace AppGenerator
 
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
+            #region Update csproj fajla
             string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\GeneratedDinamicWebSite.csproj";
             string csprojEdited = File.ReadAllText(csprojPath);
+
+            //Dodavanje MasterPage.Master strane u .csproj
             int positionToIncludeMasterPage = csprojEdited.IndexOf(@"<None Include=""Web.Debug.config""");
-            if (csprojEdited.Contains(@"<Content Include=""" + "MasterPage.Master" + "\"") == false) //zakucan base.html
+            if (csprojEdited.Contains(@"<Content Include=""" + "MasterPage.Master" + "\"") == false) //Proveri da li vec postoji MasterPage.Master u .csproj
             {
                 csprojEdited = csprojEdited.Insert(positionToIncludeMasterPage, @"<Content Include=""" + "MasterPage.Master" + "\"" + " />" + Environment.NewLine + "\t");
                 File.WriteAllText(csprojPath, csprojEdited);
             }
 
+            //Dodavanje MasterPage.Master.designer.cs klase u .csproj
             int positionToIncludeMasterPageDesigner = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
-            if (csprojEdited.Contains(@"<Compile Include=""" + "MasterPage.Master.designer.cs" + "\"") == false) //zakucan base.html
+            if (csprojEdited.Contains(@"<Compile Include=""" + "MasterPage.Master.designer.cs" + "\"") == false) //Proveri da li vec postoji MasterPage.Master.designer.cs u .csproj
             {
                 csprojEdited = csprojEdited.Insert(positionToIncludeMasterPageDesigner, @"<Compile Include=""" + "MasterPage.Master.designer.cs" + "\"" + @">
       <DependentUpon> MasterPage.Master </DependentUpon>
@@ -40,8 +44,9 @@ namespace AppGenerator
                 File.WriteAllText(csprojPath, csprojEdited);
             }
 
+            //Dodavanje MasterPage.Master.cs klase u .csproj
             int positionToIncludeMasterPageCs = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
-            if (csprojEdited.Contains(@"<Compile Include=""" + "MasterPage.Master.cs" + "\"") == false) //zakucan base.html
+            if (csprojEdited.Contains(@"<Compile Include=""" + "MasterPage.Master.cs" + "\"") == false) //Proveri da li vec postoji MasterPage.Master.cs u .csproj
             {
                 csprojEdited = csprojEdited.Insert(positionToIncludeMasterPageCs, @"<Compile Include=""" + "MasterPage.Master.cs" + "\"" + @">
       <DependentUpon> MasterPage.Master </DependentUpon>
@@ -49,19 +54,21 @@ namespace AppGenerator
     </Compile> " + Environment.NewLine + "\t");
                 File.WriteAllText(csprojPath, csprojEdited);
             }
+            #endregion
 
             List<string> pageList = new List<string>();
             XmlDocument xml = new XmlDocument();
             xml.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
             foreach(XmlNode node in xml.GetElementsByTagName("pageName"))
             {
-                pageList.Add(node.InnerText);
+                pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
             }
             string myAppName = string.Empty;
             XmlNode myAppNameNode = xml.SelectSingleNode(@"gramer/app_name");
-            myAppName = myAppNameNode.InnerText;
+            myAppName = myAppNameNode.InnerText; //Naziv aplikacije
 
-             string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master";
+            #region Generisanje MasterPage.Master strane
+            string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master";
 
             string generatedMasterPageString = @"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""MyFirstProject.MasterPage"" %>
 <!DOCTYPE html>
@@ -115,7 +122,9 @@ generatedMasterPageString = generatedMasterPageString +
                     sw.Write(generatedMasterPageString);
                 }
             }
+            #endregion
 
+            #region Generisanje MasterPage.Master.designer.cs klase
             string pathMasterDesinger = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master.designer.cs";
 
             string generatedMasterDesignerString = @"namespace GeneratedDinamicWebSite {
@@ -146,7 +155,9 @@ generatedMasterPageString = generatedMasterPageString +
                     sw.Write(generatedMasterDesignerString);
                 }
             }
+            #endregion
 
+            #region Generisanje MasterPage.Master.cs klase
             string pathMasterCs = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master.cs";
 
             string generatedMasterCsString = @"using System;
@@ -182,7 +193,9 @@ namespace GeneratedDinamicWebSite
                     sw.Write(generatedMasterCsString);
                 }
             }
+            #endregion
 
+            #region Generisanje CSS-a
             string cssString = @"
 body {
     color: #574c3f;
@@ -351,6 +364,8 @@ a:visited {
 
             string styleDirPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Styles";
             string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Styles\StyleSheet.css";
+
+            //Kreiranje foldera Styles za smestanje css fajla
             if (!Directory.Exists(styleDirPath))
             {
                 Directory.CreateDirectory(styleDirPath);
@@ -371,12 +386,15 @@ a:visited {
                     sw.Write(cssString);
                 }
             }
+            //Dodavanje css fajla u .csproj
             int positionToIncludeCSS = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
-            if (csprojEdited.Contains(@"<Content Include=""Styles\StyleSheet.css"" />") == false)
+            if (csprojEdited.Contains(@"<Content Include=""Styles\StyleSheet.css"" />") == false) //Proveri da li css postoji u .csproj
             {
                 csprojEdited = csprojEdited.Insert(positionToIncludeCSS, @"<Content Include=""Styles\StyleSheet.css""" + " />" + Environment.NewLine + "\t"); //zakucan HelpCSS.css
                 File.WriteAllText(csprojPath, csprojEdited);
             }
+            #endregion
+
 
             string imagesDirPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Images";
             if (!Directory.Exists(imagesDirPath))
