@@ -1,5 +1,6 @@
 <gramer>
 	<app_name>MyApp</app_name>
+	<banner_image>path</banner_image>
 	<tables>
 		<table>
 			<name>tabela1</name>
