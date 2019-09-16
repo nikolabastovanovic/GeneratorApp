@@ -59,13 +59,16 @@ namespace AppGenerator
             List<string> pageList = new List<string>();
             XmlDocument xml = new XmlDocument();
             xml.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
-            foreach(XmlNode node in xml.GetElementsByTagName("pageName"))
+            foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
             }
             string myAppName = string.Empty;
+            string bannerImagePath = string.Empty;
             XmlNode myAppNameNode = xml.SelectSingleNode(@"gramer/app_name");
             myAppName = myAppNameNode.InnerText; //Naziv aplikacije
+            XmlNode bannerImagePathNode = xml.SelectSingleNode(@"gramer/banner_image");
+            bannerImagePath = bannerImagePathNode.InnerText;
 
             #region Generisanje MasterPage.Master strane
             string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master";
@@ -85,17 +88,17 @@ namespace AppGenerator
            <div>
                <div id=""wrapper"">
                    <div id = ""banner"">
-                       <asp:Image ID = ""Image1"" runat = ""server"" ImageUrl = ""~/Images/BannerCar.jpg"" Width = ""100%"" />
+                       <asp:Image ID = ""Image1"" runat = ""server"" ImageUrl = """ + bannerImagePath + @""" Width = ""100%"" />
                            </div>
                                <div id = ""navigation"">
                                    <ul id = ""nav"">" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
-                    
-for (int i = 0; i < pageList.Count; i++)
-{
-    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + @" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
-}
-generatedMasterPageString = generatedMasterPageString + 
-                                   @"</ul>
+
+            for (int i = 0; i < pageList.Count; i++)
+            {
+                generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + @" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+            }
+            generatedMasterPageString = generatedMasterPageString +
+                                               @"</ul>
                                </div>
                            <div id = ""content"">
                        <asp:ContentPlaceHolder ID = ""ContentPlaceHolder1"" runat = ""server"">
