@@ -1,13 +1,22 @@
 <gramer>
-	<app_name>MyApp</app_name>
+	<app_name>MyGeneratedApp</app_name>
 	<banner_image>C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Images\BannerCar.jpg</banner_image>
+	<db_name>Garage</db_name>
 	<tables>
 		<table>
-			<name>tabela1</name>
+			<name>Product</name>
 			<columns>
-				<column>kolona1</column>
-				<column>kolona2</column>
-				<column>kolona3</column>
+				<column>TypeID</column>
+				<column>Name</column>
+				<column>Price</column>
+				<column>Description</column>
+				<column>Image</column>
+			</columns>
+		</table>
+		<table>
+			<name>ProductType</name>
+			<columns>
+				<column>Name</column>
 			</columns>
 		</table>
 	</tables>
@@ -17,3 +26,7 @@
 		<pageName>Contact</pageName>
 	</pages>
 </gramer>
+
+<!--
+	Nakon okidanja generatora, potrebno je ubaciti NuGet packages EntityFramework, a zatim ucitati model baze podataka u projekat - ADO.NET
+-->

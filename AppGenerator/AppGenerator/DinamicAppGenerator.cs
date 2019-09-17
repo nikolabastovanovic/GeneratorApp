@@ -23,7 +23,7 @@ namespace AppGenerator
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
             #region Update csproj fajla
-            string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\GeneratedDinamicWebSite.csproj";
+            string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MyGeneratedApp.csproj";
             string csprojEdited = File.ReadAllText(csprojPath);
 
             //Dodavanje MasterPage.Master strane u .csproj
@@ -71,7 +71,7 @@ namespace AppGenerator
             bannerImagePath = bannerImagePathNode.InnerText;
 
             #region Generisanje MasterPage.Master strane
-            string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master";
+            string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master";
 
             string generatedMasterPageString = @"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""MyFirstProject.MasterPage"" %>
 <!DOCTYPE html>
@@ -128,9 +128,9 @@ namespace AppGenerator
             #endregion
 
             #region Generisanje MasterPage.Master.designer.cs klase
-            string pathMasterDesinger = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master.designer.cs";
+            string pathMasterDesinger = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.designer.cs";
 
-            string generatedMasterDesignerString = @"namespace GeneratedDinamicWebSite {
+            string generatedMasterDesignerString = @"namespace MyGeneratedApp {
     
     public partial class Site1 {
         
@@ -161,7 +161,7 @@ namespace AppGenerator
             #endregion
 
             #region Generisanje MasterPage.Master.cs klase
-            string pathMasterCs = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\MasterPage.Master.cs";
+            string pathMasterCs = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.cs";
 
             string generatedMasterCsString = @"using System;
 using System.Collections.Generic;
@@ -170,7 +170,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace GeneratedDinamicWebSite
+namespace MyGeneratedApp
 {
     public partial class Site1 : System.Web.UI.MasterPage
     {
@@ -365,8 +365,8 @@ a:visited {
 
 ";
 
-            string styleDirPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Styles";
-            string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Styles\StyleSheet.css";
+            string styleDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Styles";
+            string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Styles\StyleSheet.css";
 
             //Kreiranje foldera Styles za smestanje css fajla
             if (!Directory.Exists(styleDirPath))
@@ -399,17 +399,20 @@ a:visited {
             #endregion
 
 
-            string imagesDirPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Images";
+            string imagesDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Images";
             if (!Directory.Exists(imagesDirPath))
             {
                 Directory.CreateDirectory(imagesDirPath);
             }
 
-            string modelsDirPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Models";
+            string modelsDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Models";
             if (!Directory.Exists(modelsDirPath))
             {
                 Directory.CreateDirectory(modelsDirPath);
             }
+
+            CRUDOperations.DbOperations(myAppName, xml, modelsDirPath, csprojPath);
+
         }
     }
 }

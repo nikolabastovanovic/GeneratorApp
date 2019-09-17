@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CRUDOperations.cs" />
     <Compile Include="DinamicAppGenerator.cs">
       <SubType>Form</SubType>
     </Compile>
