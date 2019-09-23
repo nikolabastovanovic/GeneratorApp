@@ -6,17 +6,17 @@
 		<table>
 			<name>Product</name>
 			<columns>
-				<column>TypeID</column>
-				<column>Name</column>
-				<column>Price</column>
-				<column>Description</column>
-				<column>Image</column>
+				<column type="int" fk="ProductType">TypeID</column>
+				<column type="string">Name</column>
+				<column type="decimal">Price</column>
+				<column type="string" multiline="true">Description</column>
+				<column type="image">Image</column>
 			</columns>
 		</table>
 		<table>
 			<name>ProductType</name>
 			<columns>
-				<column>Name</column>
+				<column type="string">Name</column>
 			</columns>
 		</table>
 	</tables>

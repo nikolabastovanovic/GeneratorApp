@@ -54,6 +54,7 @@
     <Compile Include="DinamicAppGenerator.Designer.cs">
       <DependentUpon>DinamicAppGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditCSProj.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +67,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PageGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="DinamicAppGenerator.resx">

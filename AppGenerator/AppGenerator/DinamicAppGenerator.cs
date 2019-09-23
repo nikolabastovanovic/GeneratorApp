@@ -39,7 +39,7 @@ namespace AppGenerator
             if (csprojEdited.Contains(@"<Compile Include=""" + "MasterPage.Master.designer.cs" + "\"") == false) //Proveri da li vec postoji MasterPage.Master.designer.cs u .csproj
             {
                 csprojEdited = csprojEdited.Insert(positionToIncludeMasterPageDesigner, @"<Compile Include=""" + "MasterPage.Master.designer.cs" + "\"" + @">
-      <DependentUpon> MasterPage.Master </DependentUpon>
+      <DependentUpon>MasterPage.Master</DependentUpon>
     </Compile> " + Environment.NewLine + "\t");
                 File.WriteAllText(csprojPath, csprojEdited);
             }
@@ -49,8 +49,8 @@ namespace AppGenerator
             if (csprojEdited.Contains(@"<Compile Include=""" + "MasterPage.Master.cs" + "\"") == false) //Proveri da li vec postoji MasterPage.Master.cs u .csproj
             {
                 csprojEdited = csprojEdited.Insert(positionToIncludeMasterPageCs, @"<Compile Include=""" + "MasterPage.Master.cs" + "\"" + @">
-      <DependentUpon> MasterPage.Master </DependentUpon>
-      <SubType> ASPXCodeBehind </SubType>
+      <DependentUpon>MasterPage.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile> " + Environment.NewLine + "\t");
                 File.WriteAllText(csprojPath, csprojEdited);
             }
@@ -73,7 +73,7 @@ namespace AppGenerator
             #region Generisanje MasterPage.Master strane
             string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master";
 
-            string generatedMasterPageString = @"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""MyFirstProject.MasterPage"" %>
+            string generatedMasterPageString = $@"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""{myAppName}.Site1"" %>
 <!DOCTYPE html>
 
 <html>
@@ -405,6 +405,13 @@ a:visited {
                 Directory.CreateDirectory(imagesDirPath);
             }
 
+            int positionToIncludeImages = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+            if (csprojEdited.Contains(@"<Content Include=""Styles\StyleSheet.css"" />") == false) //Proveri da li css postoji u .csproj
+            {
+                csprojEdited = csprojEdited.Insert(positionToIncludeImages, @"<Content Include=""Styles\StyleSheet.css""" + " />" + Environment.NewLine + "\t"); //zakucan HelpCSS.css
+                File.WriteAllText(csprojPath, csprojEdited);
+            }
+
             string modelsDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Models";
             if (!Directory.Exists(modelsDirPath))
             {
@@ -413,6 +420,11 @@ a:visited {
 
             CRUDOperations.DbOperations(myAppName, xml, modelsDirPath, csprojPath);
 
+            PageGenerator.GeneratePagesByModel(myAppName, xml, csprojPath);
+
+            PageGenerator.GenrateClassByModel(myAppName, xml, csprojPath);
+
+            PageGenerator.GenerateAdminPage(myAppName, xml, csprojPath);
         }
     }
 }

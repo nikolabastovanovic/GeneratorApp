@@ -19,7 +19,6 @@ namespace AppGenerator
 
             foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
             {
-                //string a = xmlNodeTableName.ParentNode.Value;
                 string modelName = xmlNodeTableName.InnerText;
                 string generatedModelsString = $@"
 using {myAppName};
@@ -91,6 +90,38 @@ generatedModelsString = generatedModelsString + "\t\t\t\t" +
             catch (Exception e)
             {{
                 return ""Error: "" + e;
+            }}
+        }}
+
+        public {modelName} Get{modelName}(int id)
+        {{
+            try
+            {{
+                using ({dbName}Entities db = new {dbName}Entities())
+                {{
+                    {modelName} {modelName.ToLower()} = db.{modelName}s.Find(id);
+                    return {modelName.ToLower()};
+                }}
+            }}
+            catch (Exception)
+            {{
+                return null;
+            }}
+        }}
+
+        public List<{modelName}> GetAll{modelName}s()
+        {{
+            try
+            {{
+                using({dbName}Entities db = new {dbName}Entities())
+                {{
+                    List<{modelName}> {modelName.ToLower()}s = (from x in db.{modelName}s select x).ToList();
+                    return {modelName.ToLower()}s;
+                }}
+            }}
+            catch (Exception)
+            {{
+                return null;
             }}
         }}
     }}
