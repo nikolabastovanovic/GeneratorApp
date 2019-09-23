@@ -19,6 +19,16 @@
 				<column type="string">Name</column>
 			</columns>
 		</table>
+		<table>
+			<name>Purchase</name>
+			<columns>
+				<column type="int" fk="Customer">CustomerID</column>
+				<column type="int" fk="Product">ProductID</column>
+				<column type="int">Amount</column>
+				<column type="string">Date</column>
+				<column type="string">IsInCart</column>
+			</columns>
+		</table>
 	</tables>
 	<pages>
 		<pageName>Home</pageName>

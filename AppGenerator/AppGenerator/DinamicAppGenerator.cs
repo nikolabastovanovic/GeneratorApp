@@ -275,7 +275,7 @@ a:visited {
 }
 
 /*Webshop */
-#ContentPlaceHolder1_pnlProducts div {
+#ContentPlaceHolder1_pnlProduct div {
     float: left;
     width: 250px;
     height: 250px;

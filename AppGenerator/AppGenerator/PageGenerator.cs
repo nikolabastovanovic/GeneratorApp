@@ -52,10 +52,10 @@ namespace AppGenerator
                             generatedPagesString = generatedPagesString + "<p>\n" +
                             $@"<asp:DropDownList ID=""ddl{modelColumnName}"" runat=""server"" DataSourceID=""SqlDataSource1"" DataTextField=""ID"" DataValueField = ""ID"" >
              </asp:DropDownList>
-              <asp:SqlDataSource ID=""SqlDataSource1"" runat=""server"" ConnectionString=""<%$ ConnectionStrings:{dbName}ConnectionString %>"" SelectCommand = ""SELECT * FROM [{xmlNodeTableColumns.Attributes["fk"].Value}] ORDER BY [ID]""></asp:SqlDataSource>" + "\n</p>";
+              <asp:SqlDataSource ID=""SqlDataSource{modelColumnName}"" runat=""server"" ConnectionString=""<%$ ConnectionStrings:{dbName}ConnectionString %>"" SelectCommand = ""SELECT * FROM [{xmlNodeTableColumns.Attributes["fk"].Value}] ORDER BY [ID]""></asp:SqlDataSource>" + "\n</p>";
 
                             aspxDesignerString += $@"protected global::System.Web.UI.WebControls.DropDownList ddl{modelColumnName};" + "\n";
-                            aspxDesignerString += @"protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;" + "\n";
+                            aspxDesignerString += $@"protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource{modelColumnName};" + "\n";
                         }
                         else if (xmlNodeTableColumns.Attributes["type"].Value == "int" ||
                                  xmlNodeTableColumns.Attributes["type"].Value == "string" ||
@@ -166,9 +166,9 @@ namespace {myAppName}.Pages
                         {
                             generateClassModelString += $@"{modelName.ToLower()}.{modelColumnName} = txt{modelColumnName}.Text;" + "\n\t\t\t";
                         }
-                        else if (xmlNodeTableColumns.Attributes["type"].Value == "string")
+                        else if (xmlNodeTableColumns.Attributes["type"].Value == "int")
                         {
-                            generateClassModelString += $@"{modelName.ToLower()}.{modelColumnName} = ddl{modelColumnName}.SelectedValue;" + "\n\t\t\t";
+                            generateClassModelString += $@"{modelName.ToLower()}.{modelColumnName} = Convert.ToInt32(txt{modelColumnName}.Text);" + "\n\t\t\t";
                         }
                     }
                 }
@@ -695,6 +695,8 @@ namespace {myApp}
                             }
                         }
                         generatedIndexPageClassString += $@"
+
+                    pnl{modelName}.Controls.Add({modelName.ToLower()}Panel);
                 }}
             }}
             else
@@ -744,5 +746,7 @@ namespace {myApp} {{
             csprojEdited = EditCSProj.IncludePages(indexPageDesignerPath, generatedIndexPageDesignerString, csprojPath, insertStartPosition, stringToInsert);
             #endregion
         }
+
+
     }
 }
