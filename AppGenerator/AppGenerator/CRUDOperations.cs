@@ -12,8 +12,6 @@ namespace AppGenerator
     {
         public static void DbOperations(string myAppName, XmlDocument xmlDocument, string modelsDirPath, string csprojPath)
         {
-            //string generatedModelsString = string.Empty;
-
             XmlNode dbNameNode = xmlDocument.SelectSingleNode(@"gramer/db_name");
             string dbName = dbNameNode.InnerText; //Naziv baze
 
@@ -58,7 +56,6 @@ namespace {myAppName}.Models
                 {
                     string a = xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText;
                     string modelColumnName = xmlNodeTableColumns.InnerText;
-                    //p.Name = { modelName.ToLower()}.Name;
                     if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
                     {
                         generatedModelsString = generatedModelsString + "\t\t\t\ttmp." + modelColumnName + " = " + modelName.ToLower() + "." + modelColumnName + ";\n";
@@ -127,32 +124,13 @@ generatedModelsString = generatedModelsString + "\t\t\t\t" +
     }}
 }}
 ";
-                string modelsPath = modelsDirPath + @"\" + modelName + "Model.cs";
-                if (File.Exists(modelsPath))
-                {
-                    File.Delete(modelsPath);
-                    using (StreamWriter sw = File.CreateText(modelsPath))
-                    {
-                        sw.Write(generatedModelsString);
-                    }
-                }
-                else
-                {
-                    using (StreamWriter sw = File.CreateText(modelsPath))
-                    {
-                        sw.Write(generatedModelsString);
-                    }
-                }
-
                 //Dodavanje Models u .csproj
+                string modelsPath = modelsDirPath + @"\" + modelName + "Model.cs";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeModeles = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
-                if (csprojEdited.Contains($"<Compile Include=\"Models\\{modelName}Model.cs\" />") == false) //Proveri da li vec postoji Models u .csproj
-                {
-                    csprojEdited = csprojEdited.Insert(positionToIncludeModeles, $"<Compile Include=\"Models\\{modelName}Model.cs\" />" + Environment.NewLine + "\t");
-                    File.WriteAllText(csprojPath, csprojEdited);
-                }
+                string stringToInsert = $@"<Compile Include=""Models\{modelName}Model.cs"" />";
 
+                csprojEdited = EditCSProj.IncludePages(modelsPath, generatedModelsString, csprojPath, positionToIncludeModeles, stringToInsert);
             }
         }
     }

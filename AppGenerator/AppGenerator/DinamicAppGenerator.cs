@@ -425,6 +425,8 @@ a:visited {
             PageGenerator.GenrateClassByModel(myAppName, xml, csprojPath);
 
             PageGenerator.GenerateAdminPage(myAppName, xml, csprojPath);
+
+            PageGenerator.GenerateIndexPage(myAppName, xml, csprojPath);
         }
     }
 }

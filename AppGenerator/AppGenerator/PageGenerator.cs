@@ -98,39 +98,16 @@ namespace AppGenerator
 
                 aspxDesignerString += $@"protected global::System.Web.UI.WebControls.Button btnSubmit;" + "\n";
                 aspxDesignerString += $@"protected global::System.Web.UI.WebControls.Label lblResult;" + "\n}\n}";
-
+                 
+                //Dodavanje aspx
                 string pagesPath = PagesDirPath + @"\Manage" + modelName + "s.aspx";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeAspx = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
                 csprojEdited = EditCSProj.IncludePages(pagesPath, generatedPagesString, csprojPath, positionToIncludeAspx, $@"<Content Include=""Pages\Manage{modelName}s.aspx"" />");
 
+                //Dodavanje aspx.designer.cs
                 string pagesDesignerPath = PagesDirPath + @"\Manage" + modelName + "s.aspx.designer.cs";
-
-
-                //if (File.Exists(pagesDesignerPath))
-                //{
-                //    File.Delete(pagesDesignerPath);
-                //    using (StreamWriter sw = File.CreateText(pagesDesignerPath))
-                //    {
-                //        sw.Write(aspxDesignerString);
-                //    }
-                //}
-                //else
-                //{
-                //    using (StreamWriter sw = File.CreateText(pagesDesignerPath))
-                //    {
-                //        sw.Write(aspxDesignerString);
-                //    }
-                //}
-
                 int positionToIncludePageDesigner = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
-                //            if (csprojEdited.Contains($@"<Compile Include=""Pages\Manage{modelName}s.aspx.designer.cs"">") == false) //Proveri da li vec postoji MasterPage.Master.designer.cs u .csproj
-                //            {
-                //                csprojEdited = csprojEdited.Insert(positionToIncludePageDesigner, $@"<Compile Include=""Pages\Manage{modelName}s.aspx.designer.cs"">" + "\n" +
-                //  $@"<DependentUpon>Manage{modelName}s.aspx</DependentUpon>" + "\n" +
-                //@"</Compile> " + Environment.NewLine + "\n\t");
-                //                File.WriteAllText(csprojPath, csprojEdited);
-                //            }
                 string pageDesigner = $@"<Compile Include=""Pages\Manage{modelName}s.aspx.designer.cs"">" + "\n" +
       $@"<DependentUpon>Manage{modelName}s.aspx</DependentUpon>" + "\n" +
     @"</Compile> " + Environment.NewLine + "\n\t";
@@ -209,34 +186,10 @@ namespace {myAppName}.Pages
         }}
     }}
 }}";
-
+                //Dodavanje aspx.cs
                 string pagesClassModelPath = PagesDirPath + @"\Manage" + modelName + "s.aspx.cs";
-                //if (File.Exists(pagesClassModelPath))
-                //{
-                //    File.Delete(pagesClassModelPath);
-                //    using (StreamWriter sw = File.CreateText(pagesClassModelPath))
-                //    {
-                //        sw.Write(generateClassModelString);
-                //    }
-                //}
-                //else
-                //{
-                //    using (StreamWriter sw = File.CreateText(pagesClassModelPath))
-                //    {
-                //        sw.Write(generateClassModelString);
-                //    }
-                //}
-
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludePageClassModel = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
-                //           if (csprojEdited.Contains($@"<Compile Include=""Pages\Manage{modelName}s.aspx.cs"">") == false) //Proveri da li vec postoji MasterPage.Master.designer.cs u .csproj
-                //           {
-                //               csprojEdited = csprojEdited.Insert(positionToIncludePageClassModel, $@"<Compile Include=""Pages\Manage{modelName}s.aspx.cs"">" + "\n" +
-                // $@"<DependentUpon>Manage{modelName}s.aspx</DependentUpon>
-                //  <SubType>ASPXCodeBehind</SubType>
-                //</Compile>" + Environment.NewLine + "\n\t");
-                //               File.WriteAllText(csprojPath, csprojEdited);
-
                 string stringToInsert = $@"<Compile Include=""Pages\Manage{modelName}s.aspx.cs"">" + "\n" +
   $@"<DependentUpon>Manage{modelName}s.aspx</DependentUpon>
        <SubType>ASPXCodeBehind</SubType>
@@ -244,7 +197,6 @@ namespace {myAppName}.Pages
                 csprojEdited = EditCSProj.IncludePages(pagesClassModelPath, generateClassModelString, csprojPath, positionToIncludePageClassModel, stringToInsert);
             }
         }
-
 
         public static void GenerateAdminPage(string myAppName, XmlDocument xmlDocument, string csprojPath)
         {
@@ -597,6 +549,199 @@ namespace {myAppName}.Pages
 @"</Compile> " + Environment.NewLine + "\n\t");
                 File.WriteAllText(csprojPath, csprojEdited);
             }
+            #endregion
+        }
+
+        public static void GenerateIndexPage(string myApp, XmlDocument xmlDocument, string csprojPath)
+        {
+            string generatedIndexPageString = string.Empty;
+            string generatedIndexPageClassString = string.Empty;
+            string generatedIndexPageDesignerString = string.Empty;
+
+            XmlNode dbNameNode = xmlDocument.SelectSingleNode(@"gramer/db_name");
+            string dbName = dbNameNode.InnerText; //Naziv baze
+
+            #region Generate Index.aspx
+            StringBuilder sb = new StringBuilder($@"<%@ Page Title="""" Language=""C#"" MasterPageFile=""~/MasterPage.Master"" AutoEventWireup=""true"" CodeBehind=""Index.aspx.cs"" Inherits=""{myApp}.Index"" %>" + "\n");
+            StringWriter stringWriter = new StringWriter(sb);
+
+            using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
+            {
+                writer.AddAttribute("ID", "Content1");
+                writer.AddAttribute("ContentPlaceHolderID", "head");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:Content");
+                writer.RenderEndTag(); //End asp:Content tag
+                writer.WriteLine();
+
+                writer.AddAttribute("ID", "Content2");
+                writer.AddAttribute("ContentPlaceHolderID", "ContentPlaceHolder1");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:Content");
+
+                foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+                {
+                    if (xmlNodeTableName.Attributes["index"] != null)
+                    {
+                        if (xmlNodeTableName.Attributes["index"].Value == "true")
+                        {
+                            writer.AddAttribute("ID", "pnl" + xmlNodeTableName.InnerText);
+                            writer.AddAttribute("runat", "server");
+                            writer.RenderBeginTag("asp:Panel");
+                            writer.RenderEndTag(); //End asp:Panel tag
+                            writer.WriteLine();
+                        }
+                    }
+                }
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "clear:both");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.RenderEndTag(); //End div tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End asp:Content tag
+                writer.WriteLine();
+            }
+            generatedIndexPageString += stringWriter.ToString();
+            string indexPagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Index.aspx";
+            string csprojEdited = File.ReadAllText(csprojPath);
+            int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+            string stringToInsert = $@"<Content Include=""Index.aspx"" />";
+
+            csprojEdited = EditCSProj.IncludePages(indexPagePath, generatedIndexPageString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+
+            #region Generate Index.aspx.cs
+            generatedIndexPageClassString = $@"
+using {myApp}.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace {myApp}
+{{
+    public partial class Index : System.Web.UI.Page
+    {{
+        protected void Page_Load(object sender, EventArgs e)
+        {{
+            FillPage();
+        }}
+
+        private void FillPage()
+        {{";
+
+            foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+            {
+                string modelName = xmlNodeTableName.InnerText;
+                if (xmlNodeTableName.Attributes["index"] != null)
+                {
+                    if (xmlNodeTableName.Attributes["index"].Value == "true")
+                    {
+                        generatedIndexPageClassString += $@"
+            {modelName}Model {modelName.ToLower()}Model = new {modelName}Model();
+            List<{modelName}> {modelName.ToLower()}s = {modelName.ToLower()}Model.GetAll{modelName}s();
+
+            if ({modelName.ToLower()}s != null)
+            {{
+                foreach({modelName} {modelName.ToLower()} in {modelName.ToLower()}s)
+                {{
+                    Panel {modelName.ToLower()}Panel = new Panel();
+                    ImageButton imageButton = new ImageButton();";
+
+                        foreach (XmlNode xmlNodeTableColumns in xmlDocument.GetElementsByTagName("column"))
+                        {
+                            string modelColumnName = xmlNodeTableColumns.InnerText;
+                            if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                            {
+                                if (xmlNodeTableColumns.Attributes["index"] != null && xmlNodeTableColumns.Attributes["index"].Value == "true")
+                                {
+                                    if (xmlNodeTableColumns.Attributes["type"].Value == "string")
+                                    {
+                                        generatedIndexPageClassString += $@"
+                    Label lbl{modelColumnName} = new Label();
+                    lbl{modelColumnName}.Text = {modelName.ToLower()}.{modelColumnName};
+                    lbl{modelColumnName}.CssClass = ""productName"";
+                    { modelName.ToLower()}Panel.Controls.Add(lbl{modelColumnName});
+                    {modelName.ToLower()}Panel.Controls.Add(new Literal {{ Text = ""<br/>"" }});
+";
+                                    }
+
+                                    else if (xmlNodeTableColumns.Attributes["type"].Value == "decimal" || xmlNodeTableColumns.Attributes["type"].Value == "int")
+                                    {
+                                        generatedIndexPageClassString += $@"
+                    Label lbl{modelColumnName} = new Label();
+                    lbl{modelColumnName}.Text = {modelName.ToLower()}.{modelColumnName}.ToString();
+                    lbl{modelColumnName}.CssClass = ""productPrice"";
+                    {modelName.ToLower()}Panel.Controls.Add(lbl{modelColumnName});
+                    {modelName.ToLower()}Panel.Controls.Add(new Literal {{ Text = ""<br/>"" }});
+";
+                                    }
+
+                                    else if (xmlNodeTableColumns.Attributes["type"].Value == "image")
+                                    {
+                                        generatedIndexPageClassString += $@"
+                    imageButton.ImageUrl = ""~/Images/Products/"" + {modelName.ToLower()}.Image;
+                    imageButton.CssClass = ""productImage"";
+                    imageButton.PostBackUrl = ""~/Pages/{modelName}Item.aspx?id="" + {modelName.ToLower()}.ID;
+                    {modelName.ToLower()}Panel.Controls.Add(imageButton);
+                    {modelName.ToLower()}Panel.Controls.Add(new Literal {{ Text = ""<br/>"" }});
+";
+                    
+                                    }
+                                }
+                            }
+                        }
+                        generatedIndexPageClassString += $@"
+                }}
+            }}
+            else
+            {{
+                pnl{modelName}.Controls.Add(new Literal {{ Text = ""No products found!"" }});
+            }}
+        }}
+    }}
+}}";
+                    }
+                }
+            }
+
+            string indexPageClassPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Index.aspx.cs";
+            insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+            stringToInsert = $@"<Compile Include=""Index.aspx.cs"">" + "\n" +
+  $@"<DependentUpon>Index.aspx</DependentUpon>
+       <SubType>ASPXCodeBehind</SubType>
+     </Compile>" + Environment.NewLine + "\n\t";
+            csprojEdited = EditCSProj.IncludePages(indexPageClassPath, generatedIndexPageClassString, csprojPath, insertStartPosition, stringToInsert);
+
+            #endregion
+
+            #region Generate Index.aspx.designer.cs
+            foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+            {
+                string modelName = xmlNodeTableName.InnerText;
+                if (xmlNodeTableName.Attributes["index"] != null)
+                {
+                    if (xmlNodeTableName.Attributes["index"].Value == "true")
+                    {
+                        generatedIndexPageDesignerString = $@"
+namespace {myApp} {{
+    
+    public partial class Index {{
+
+        protected global::System.Web.UI.WebControls.Panel pnl{modelName};
+    }}
+}}";
+                    }
+                }
+            }
+            string indexPageDesignerPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Index.aspx.designer.cs";
+            stringToInsert = $@"<Compile Include=""Index.aspx.designer.cs"">" + "\n" +
+  $@"<DependentUpon>Index.aspx</DependentUpon>" + "\n" +
+@"</Compile> " + Environment.NewLine + "\n\t";
+            csprojEdited = EditCSProj.IncludePages(indexPageDesignerPath, generatedIndexPageDesignerString, csprojPath, insertStartPosition, stringToInsert);
             #endregion
         }
     }
