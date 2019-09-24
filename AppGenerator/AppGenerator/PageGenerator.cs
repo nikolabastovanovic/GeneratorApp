@@ -938,7 +938,7 @@ namespace {myApp} {{
             csprojEdited = EditCSProj.IncludePages(itemPagePath, generatedItemPageString, csprojPath, insertStartPosition, stringToInsert);
             #endregion
 
-            #region Generate Item.aspx.cs
+            #region Generate Item.aspx.cs and Item.aspx.designer.cs
             generatedItemPageDesignerString = $@"
 namespace {myApp} {{
     
