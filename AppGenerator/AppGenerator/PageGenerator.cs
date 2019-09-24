@@ -98,7 +98,7 @@ namespace AppGenerator
 
                 aspxDesignerString += $@"protected global::System.Web.UI.WebControls.Button btnSubmit;" + "\n";
                 aspxDesignerString += $@"protected global::System.Web.UI.WebControls.Label lblResult;" + "\n}\n}";
-                 
+
                 //Dodavanje aspx
                 string pagesPath = PagesDirPath + @"\Manage" + modelName + "s.aspx";
                 string csprojEdited = File.ReadAllText(csprojPath);
@@ -689,7 +689,7 @@ namespace {myApp}
                     {modelName.ToLower()}Panel.Controls.Add(imageButton);
                     {modelName.ToLower()}Panel.Controls.Add(new Literal {{ Text = ""<br/>"" }});
 ";
-                    
+
                                     }
                                 }
                             }
@@ -747,6 +747,302 @@ namespace {myApp} {{
             #endregion
         }
 
+        public static void GeneratePageItem(string myApp, XmlDocument xmlDocument, string csprojPath)
+        {
+            string generatedItemPageString = string.Empty;
+            string generatedItemPageClassString = string.Empty;
+            string generatedItemPageDesignerString = string.Empty;
 
+            XmlNode dbNameNode = xmlDocument.SelectSingleNode(@"gramer/db_name");
+            string dbName = dbNameNode.InnerText; //Naziv baze
+
+            string itemModelName = string.Empty;
+            string itemPagePath = string.Empty;
+            string stringToInsert = string.Empty;
+            foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+            {
+                if (xmlNodeTableName.Attributes["index"] != null)
+                {
+                    if (xmlNodeTableName.Attributes["index"].Value == "true")
+                    {
+                        itemModelName = xmlNodeTableName.InnerText;
+                        itemPagePath = $@"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\{itemModelName}Item.aspx";
+                        stringToInsert = $@"<Content Include=""Pages\{itemModelName}Item.aspx"" />";
+                    }
+                }
+            }
+
+            #region Generate Item.aspx
+            StringBuilder sb = new StringBuilder($@"<%@ Page Title="""" Language=""C#"" MasterPageFile=""~/MasterPage.Master"" AutoEventWireup=""true"" CodeBehind=""{itemModelName}Item.aspx.cs"" Inherits=""{myApp}.{itemModelName}Item"" %>" + "\n");
+            StringWriter stringWriter = new StringWriter(sb);
+
+            using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
+            {
+                writer.AddAttribute("ID", "Content1");
+                writer.AddAttribute("ContentPlaceHolderID", "head");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:Content");
+                writer.RenderEndTag(); //End asp:Content tag
+                writer.WriteLine();
+
+                writer.AddAttribute("ID", "Content2");
+                writer.AddAttribute("ContentPlaceHolderID", "ContentPlaceHolder1");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:Content");
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Table);
+                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+                {
+                    string modelName = xmlNodeTableName.InnerText;
+                    if (xmlNodeTableName.Attributes["index"] != null)
+                    {
+                        if (xmlNodeTableName.Attributes["index"].Value == "true")
+                        {
+                            foreach (XmlNode xmlNodeTableColumns in xmlDocument.GetElementsByTagName("column"))
+                            {
+                                string modelColumnName = xmlNodeTableColumns.InnerText;
+                                if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                                {
+                                    if (xmlNodeTableColumns.Attributes["type"] != null && xmlNodeTableColumns.Attributes["type"].Value == "image")
+                                    {
+                                        writer.AddAttribute(HtmlTextWriterAttribute.Rowspan, "4");
+                                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "width: 400px");
+                                        writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                                        writer.WriteLine();
+                                        writer.AddAttribute("ID", "img" + modelName);
+                                        writer.AddAttribute("runat", "server");
+                                        writer.AddAttribute("CssClass", "detailsImage");
+                                        writer.RenderBeginTag("asp:Image");
+                                        writer.RenderEndTag(); //End asp:Image tag
+                                        writer.WriteLine();
+                                        writer.RenderEndTag(); //End td tag
+                                        writer.WriteLine();
+                                    }
+                                }
+                            }
+
+                            foreach (XmlNode xmlNodeTableColumns in xmlDocument.GetElementsByTagName("column"))
+                            {
+                                string modelColumnName = xmlNodeTableColumns.InnerText;
+                                if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                                {
+                                    if (xmlNodeTableColumns.Attributes["tittle"] != null && xmlNodeTableColumns.Attributes["tittle"].Value == "true")
+                                    {
+                                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "width: 400px");
+                                        writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                                        writer.WriteLine();
+                                        writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                                        writer.AddAttribute("ID", "lblTittle");
+                                        writer.AddAttribute("runat", "server");
+                                        writer.RenderBeginTag("asp:Label");
+                                        writer.RenderEndTag(); //End asp:Image tag
+                                        writer.WriteLine();
+                                        writer.RenderEndTag(); //End h2 tag
+                                        writer.WriteLine();
+                                        writer.WriteLine("<hr/>");
+                                        writer.RenderEndTag(); //End td tag
+                                        writer.WriteLine();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                writer.RenderEndTag(); //End tr tag
+                writer.WriteLine();
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+                {
+                    string modelName = xmlNodeTableName.InnerText;
+                    if (xmlNodeTableName.Attributes["index"] != null)
+                    {
+                        if (xmlNodeTableName.Attributes["index"].Value == "true")
+                        {
+                            foreach (XmlNode xmlNodeTableColumns in xmlDocument.GetElementsByTagName("column"))
+                            {
+                                string modelColumnName = xmlNodeTableColumns.InnerText;
+                                if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                                {
+                                    if (xmlNodeTableColumns.Attributes["multiline"] != null && xmlNodeTableColumns.Attributes["multiline"].Value == "true")
+                                    {
+                                        writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                                        writer.WriteLine();
+                                        writer.AddAttribute("ID", "lbl" + modelColumnName);
+                                        writer.AddAttribute("runat", "server");
+                                        writer.AddAttribute("CssClass", "detailsDescription");
+                                        writer.RenderBeginTag("asp:Label");
+                                        writer.RenderEndTag(); //End asp:Label tag
+                                        writer.WriteLine();
+                                        writer.RenderEndTag(); //End td tag
+                                        writer.WriteLine();
+                                    }
+                                }
+                            }
+
+                            foreach (XmlNode xmlNodeTableColumns in xmlDocument.GetElementsByTagName("column"))
+                            {
+                                string modelColumnName = xmlNodeTableColumns.InnerText;
+                                if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                                {
+                                    if (xmlNodeTableColumns.Attributes["multiline"] == null && xmlNodeTableColumns.Attributes["tittle"] == null
+                                        && xmlNodeTableColumns.Attributes["type"].Value != "image" && xmlNodeTableColumns.Attributes["fk"] == null
+                                        && (xmlNodeTableColumns.Attributes["type"].Value == "string" || xmlNodeTableColumns.Attributes["type"].Value == "decimal" || xmlNodeTableColumns.Attributes["type"].Value == "int"))
+                                    {
+                                        writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                                        writer.WriteLine();
+                                        writer.AddAttribute("ID", "lbl" + modelColumnName);
+                                        writer.AddAttribute("runat", "server");
+                                        writer.AddAttribute("CssClass", "detailsPrice");
+                                        writer.RenderBeginTag("asp:Label");
+                                        writer.RenderEndTag(); //End asp:Label tag
+                                        writer.WriteLine();
+                                        writer.RenderEndTag(); //End td tag
+                                        writer.WriteLine();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                writer.RenderEndTag(); //End tr tag
+                writer.WriteLine();
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+                writer.RenderBeginTag(HtmlTextWriterTag.Td);
+                writer.WriteLine();
+                writer.WriteLine(itemModelName + " No: <br/>");
+                writer.WriteLine();
+                writer.AddAttribute("ID", "lblItemNumber");
+                writer.AddAttribute("runat", "server");
+                writer.AddAttribute("style", "font-style: italic");
+                writer.RenderBeginTag("asp:Label");
+                writer.RenderEndTag(); //End asp:Label tag
+                writer.WriteLine();
+                writer.RenderEndTag(); //End td tag
+                writer.WriteLine();
+                writer.RenderEndTag(); //End tr tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End table tag
+                writer.WriteLine();
+                writer.RenderEndTag(); //End asp:Content tag
+                writer.WriteLine();
+            }
+
+            generatedItemPageString = stringWriter.ToString();
+            string csprojEdited = File.ReadAllText(csprojPath);
+            int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+
+            csprojEdited = EditCSProj.IncludePages(itemPagePath, generatedItemPageString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+
+            #region Generate Item.aspx.cs
+            generatedItemPageDesignerString = $@"
+namespace {myApp} {{
+    
+    public partial class {itemModelName}Item {{";
+
+            generatedItemPageClassString = $@"
+using {myApp}.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace {myApp}
+{{
+    public partial class {itemModelName}Item : System.Web.UI.Page
+    {{
+        protected void Page_Load(object sender, EventArgs e)
+        {{
+            FillPage();
+        }}
+
+        private void FillPage()
+        {{
+            if(!String.IsNullOrWhiteSpace(Request.QueryString[""id""]))
+            {{
+                int id = Convert.ToInt32(Request.QueryString[""id""]);
+                {itemModelName}Model {itemModelName.ToLower()}Model = new {itemModelName}Model();
+                {itemModelName} {itemModelName.ToLower()} = {itemModelName.ToLower()}Model.Get{itemModelName}(id);
+";
+            foreach (XmlNode xmlNodeTableName in xmlDocument.GetElementsByTagName("name"))
+            {
+                string modelName = xmlNodeTableName.InnerText;
+                if (xmlNodeTableName.Attributes["index"] != null)
+                {
+                    if (xmlNodeTableName.Attributes["index"].Value == "true")
+                    {
+                        foreach (XmlNode xmlNodeTableColumns in xmlDocument.GetElementsByTagName("column"))
+                        {
+                            string modelColumnName = xmlNodeTableColumns.InnerText;
+                            if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                            {
+                                if (xmlNodeTableColumns.Attributes["type"] != null && xmlNodeTableColumns.Attributes["type"].Value == "image")
+                                {
+                                    generatedItemPageClassString += $@"
+                img{modelName}.ImageUrl = ""~/Images/Products"" + {modelName.ToLower()}.{modelColumnName};";
+                                    generatedItemPageDesignerString += $@"
+        protected global::System.Web.UI.WebControls.Image img{itemModelName};";
+                                }
+                                else if (xmlNodeTableColumns.Attributes["tittle"] != null && xmlNodeTableColumns.Attributes["tittle"].Value == "true")
+                                {
+                                    generatedItemPageClassString += $@"
+                lblTittle.Text = {modelName.ToLower()}.{modelColumnName};";
+                                    generatedItemPageDesignerString += $@"
+        protected global::System.Web.UI.WebControls.Label lblTittle;";
+                                }
+                                else if (xmlNodeTableColumns.Attributes["multiline"] != null && xmlNodeTableColumns.Attributes["multiline"].Value == "true")
+                                {
+                                    generatedItemPageClassString += $@"
+                lbl{modelColumnName}.Text = {modelName.ToLower()}.{modelColumnName};";
+                                    generatedItemPageDesignerString += $@"
+        protected global::System.Web.UI.WebControls.Label lbl{modelColumnName};";
+                                }
+                                else if (xmlNodeTableColumns.Attributes["multiline"] == null && xmlNodeTableColumns.Attributes["tittle"] == null
+                                        && xmlNodeTableColumns.Attributes["type"].Value != "image" && xmlNodeTableColumns.Attributes["fk"] == null
+                                        && (xmlNodeTableColumns.Attributes["type"].Value == "string" || xmlNodeTableColumns.Attributes["type"].Value == "decimal" || xmlNodeTableColumns.Attributes["type"].Value == "int"))
+                                {
+                                    generatedItemPageClassString += $@"
+                lbl{modelColumnName}.Text = ""{modelColumnName}: "" + {modelName.ToLower()}.{modelColumnName}.ToString();";
+                                    generatedItemPageDesignerString += $@"
+        protected global::System.Web.UI.WebControls.Label lbl{modelColumnName};";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            generatedItemPageClassString += $@"
+                lblItemNumber.Text = id.ToString();
+            }}
+        }}
+    }}
+}}
+";
+            generatedItemPageDesignerString += $@"
+        protected global::System.Web.UI.WebControls.Label lblItemNumber;
+    }}
+}}";
+
+            itemPagePath = $@"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\{itemModelName}Item.aspx.cs";
+            insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+            stringToInsert = $@"<Compile Include=""Pages\{itemModelName}Item.aspx.cs"">" + "\n" +
+  $@"<DependentUpon>{itemModelName}Item.aspx</DependentUpon>
+       <SubType>ASPXCodeBehind</SubType>
+     </Compile>" + Environment.NewLine + "\n\t";
+            csprojEdited = EditCSProj.IncludePages(itemPagePath, generatedItemPageClassString, csprojPath, insertStartPosition, stringToInsert);
+
+            stringToInsert = $@"<Compile Include=""Pages\{itemModelName}Item.aspx.designer.cs"">" + "\n" +
+  $@"<DependentUpon>{itemModelName}Item.aspx</DependentUpon>" + "\n" +
+@"</Compile> " + Environment.NewLine + "\n\t";
+            itemPagePath = $@"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\{itemModelName}Item.aspx.designer.cs";
+            csprojEdited = EditCSProj.IncludePages(itemPagePath, generatedItemPageDesignerString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+        }
     }
 }

@@ -7,7 +7,7 @@
 			<name index="true">Product</name>
 			<columns>
 				<column type="int" fk="ProductType">TypeID</column>
-				<column type="string" index="true">Name</column>
+				<column type="string" index="true" tittle="true">Name</column>
 				<column type="decimal" index="true">Price</column>
 				<column type="string" multiline="true">Description</column>
 				<column type="image" index="true">Image</column>

@@ -427,6 +427,8 @@ a:visited {
             PageGenerator.GenerateAdminPage(myAppName, xml, csprojPath);
 
             PageGenerator.GenerateIndexPage(myAppName, xml, csprojPath);
+
+            PageGenerator.GeneratePageItem(myAppName, xml, csprojPath);
         }
     }
 }
