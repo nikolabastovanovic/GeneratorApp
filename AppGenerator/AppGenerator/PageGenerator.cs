@@ -985,7 +985,7 @@ namespace {myApp}
                                 if (xmlNodeTableColumns.Attributes["type"] != null && xmlNodeTableColumns.Attributes["type"].Value == "image")
                                 {
                                     generatedItemPageClassString += $@"
-                img{modelName}.ImageUrl = ""~/Images/Products"" + {modelName.ToLower()}.{modelColumnName};";
+                img{modelName}.ImageUrl = ""~/Images/Products/"" + {modelName.ToLower()}.{modelColumnName};";
                                     generatedItemPageDesignerString += $@"
         protected global::System.Web.UI.WebControls.Image img{itemModelName};";
                                 }
