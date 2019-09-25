@@ -1044,5 +1044,159 @@ namespace {myApp}
             csprojEdited = EditCSProj.IncludePages(itemPagePath, generatedItemPageDesignerString, csprojPath, insertStartPosition, stringToInsert);
             #endregion
         }
+
+        public static void GenerateRegisterPage(string myApp, XmlDocument xmlDocument, string csprojPath)
+        {
+            string generatedRegisterString = string.Empty;
+            string generatedRegisterClassString = string.Empty;
+            string generatedRegisterDesignerString = string.Empty;
+
+            string pagePath = string.Empty;
+            string stringToInsert = string.Empty;
+
+            #region Generate Register.aspx
+            StringBuilder sb = new StringBuilder($@"<%@ Page Title="""" Language=""C#"" MasterPageFile=""~/MasterPage.Master"" AutoEventWireup=""true"" CodeBehind=""Register.aspx.cs"" Inherits=""{myApp}.Pages.Account.Register"" %>" + "\n");
+            StringWriter stringWriter = new StringWriter(sb);
+
+            using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
+            {//<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+                writer.AddAttribute("ID", "Content1");
+                writer.AddAttribute("ContentPlaceHolderID", "head");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:Content");
+                writer.RenderEndTag(); //End asp:Content tag
+            }
+            generatedRegisterString = stringWriter.ToString();
+            pagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Register.aspx";
+            string csprojEdited = File.ReadAllText(csprojPath);
+            int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+            stringToInsert = $@"<Content Include=""Pages\Account\Register.aspx"" />";
+
+            csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+
+            #region Generate Register.aspx.designer.cs
+            generatedRegisterDesignerString = $@"
+namespace {myApp}.Pages.Account {{
+    
+    public partial class Register {{
+
+    }}
+}}";
+            pagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Register.aspx.designer.cs";
+            insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+            stringToInsert = $@"<Compile Include=""Pages\Account\Register.aspx.designer.cs"">" + "\n" +
+  $@"<DependentUpon>Register.aspx</DependentUpon>" + "\n" +
+@"</Compile> " + Environment.NewLine + "\n\t";
+
+            csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterDesignerString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+
+            #region Generate Register.aspx.cs
+            generatedRegisterClassString = $@"
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace {myApp}.Pages.Account
+{{
+    public partial class Register : System.Web.UI.Page
+    {{
+
+    }}
+}}";
+            pagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Register.aspx.cs";
+            insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+            stringToInsert = $@"<Compile Include=""Pages\Account\Register.aspx.cs"">" + "\n" +
+  $@"<DependentUpon>Register.aspx</DependentUpon>
+       <SubType>ASPXCodeBehind</SubType>
+     </Compile>" + Environment.NewLine + "\n\t";
+
+            csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterClassString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+        }
+
+        public static void GenerateLogInPage(string myApp, XmlDocument xmlDocument, string csprojPath)
+        {
+            string generatedRegisterString = string.Empty;
+            string generatedRegisterClassString = string.Empty;
+            string generatedRegisterDesignerString = string.Empty;
+
+            string pagePath = string.Empty;
+            string stringToInsert = string.Empty;
+
+            #region Generate Register.aspx
+            StringBuilder sb = new StringBuilder($@"<%@ Page Title="""" Language=""C#"" MasterPageFile=""~/MasterPage.Master"" AutoEventWireup=""true"" CodeBehind=""Login.aspx.cs"" Inherits=""{myApp}.Pages.Account.Login"" %>" + "\n");
+            StringWriter stringWriter = new StringWriter(sb);
+
+            using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
+            {//<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+                writer.AddAttribute("ID", "Content1");
+                writer.AddAttribute("ContentPlaceHolderID", "head");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:Content");
+                writer.RenderEndTag(); //End asp:Content tag
+            }
+            generatedRegisterString = stringWriter.ToString();
+            pagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Login.aspx";
+            string csprojEdited = File.ReadAllText(csprojPath);
+            int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+            stringToInsert = $@"<Content Include=""Pages\Account\Login.aspx"" />";
+
+            csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+
+            #region Generate Register.aspx.designer.cs
+            generatedRegisterDesignerString = $@"
+namespace {myApp}.Pages.Account {{
+    
+    public partial class Login {{
+
+    }}
+}}";
+            pagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Login.aspx.designer.cs";
+            insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+            stringToInsert = $@"<Compile Include=""Pages\Account\Login.aspx.designer.cs"">" + "\n" +
+  $@"<DependentUpon>Login.aspx</DependentUpon>" + "\n" +
+@"</Compile> " + Environment.NewLine + "\n\t";
+
+            csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterDesignerString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+
+            #region Generate Register.aspx.cs
+            generatedRegisterClassString = $@"
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace {myApp}.Pages.Account
+{{
+    public partial class Login : System.Web.UI.Page
+    {{
+
+    }}
+}}";
+            pagePath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Login.aspx.cs";
+            insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+            stringToInsert = $@"<Compile Include=""Pages\Account\Login.aspx.cs"">" + "\n" +
+  $@"<DependentUpon>Login.aspx</DependentUpon>
+       <SubType>ASPXCodeBehind</SubType>
+     </Compile>" + Environment.NewLine + "\n\t";
+
+            csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterClassString, csprojPath, insertStartPosition, stringToInsert);
+            #endregion
+        }
     }
 }

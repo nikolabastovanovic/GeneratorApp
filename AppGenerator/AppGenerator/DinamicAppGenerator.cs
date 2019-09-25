@@ -429,6 +429,16 @@ a:visited {
             PageGenerator.GenerateIndexPage(myAppName, xml, csprojPath);
 
             PageGenerator.GeneratePageItem(myAppName, xml, csprojPath);
+
+            string acountDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account";
+            if (!Directory.Exists(acountDirPath))
+            {
+                Directory.CreateDirectory(acountDirPath);
+            }
+
+            PageGenerator.GenerateRegisterPage(myAppName, xml, csprojPath);
+
+            PageGenerator.GenerateLogInPage(myAppName, xml, csprojPath);
         }
     }
 }

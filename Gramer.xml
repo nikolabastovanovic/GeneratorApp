@@ -39,4 +39,11 @@
 
 <!--
 	Nakon okidanja generatora, potrebno je ubaciti NuGet packages EntityFramework, a zatim ucitati model baze podataka u projekat - ADO.NET
+	instalirati:
+	Microsoft.AspNet.Identity.Owin
+	Microsoft.Owin.Host.SystemWeb 
+	Microsoft.AspNet.Identity.EntityFramework
+	
+	ZAMENI U KODU PRODUCT DEO CLIENDID!!!!!!
+	IZMENI WEB.CONFIG FAJL!!!!!
 -->
