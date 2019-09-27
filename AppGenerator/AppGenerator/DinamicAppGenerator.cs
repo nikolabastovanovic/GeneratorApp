@@ -23,7 +23,7 @@ namespace AppGenerator
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
             #region Update csproj fajla
-            string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MyGeneratedApp.csproj";
+            string csprojPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MyGeneratedApp.csproj";
             string csprojEdited = File.ReadAllText(csprojPath);
 
             //Dodavanje MasterPage.Master strane u .csproj
@@ -58,7 +58,7 @@ namespace AppGenerator
 
             List<string> pageList = new List<string>();
             XmlDocument xml = new XmlDocument();
-            xml.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
+            xml.Load(@"C:\Users\Johny\AppGenerator\Gramer.xml");
             foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
@@ -71,7 +71,7 @@ namespace AppGenerator
             bannerImagePath = bannerImagePathNode.InnerText;
 
             #region Generisanje MasterPage.Master strane
-            string pathMaster = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master";
+            string pathMaster = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master";
 
             string generatedMasterPageString = $@"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""{myAppName}.Site1"" %>
 <!DOCTYPE html>
@@ -98,7 +98,15 @@ namespace AppGenerator
                 generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + @" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
             }
             generatedMasterPageString = generatedMasterPageString +
-                                               @"</ul>
+                                      @"<li style=""float:right"">
+                                            <asp:HyperLink ID=""lnkRegister"" NavigateUrl=""~/Pages/Account/Register.aspx"" runat=""server"">Register</asp:HyperLink>
+                                            <asp:HyperLink ID=""litStatus"" runat=""server"">Login</asp:HyperLink>
+                                        </li>
+                                        <li style=""float:right"">
+                                            <asp:HyperLink ID=""lnkLogin"" NavigateUrl=""~/Pages/Account/Login.aspx"" runat=""server"">LogIn</asp:HyperLink>
+                                            <asp:LinkButton ID=""lnkLogout"" runat=""server"" OnClick=""lnkLogout_Click"">LogOut</asp:LinkButton>
+                                        </li>
+                                    </ul>
                                </div>
                            <div id = ""content"">
                        <asp:ContentPlaceHolder ID = ""ContentPlaceHolder1"" runat = ""server"">
@@ -128,17 +136,19 @@ namespace AppGenerator
             #endregion
 
             #region Generisanje MasterPage.Master.designer.cs klase
-            string pathMasterDesinger = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.designer.cs";
+            string pathMasterDesinger = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.designer.cs";
 
             string generatedMasterDesignerString = @"namespace MyGeneratedApp {
     
     public partial class Site1 {
         
         protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
-
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-
         protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
+        protected global::System.Web.UI.WebControls.HyperLink lnkRegister;
+        protected global::System.Web.UI.WebControls.HyperLink litStatus;
+        protected global::System.Web.UI.WebControls.HyperLink lnkLogin;
+        protected global::System.Web.UI.WebControls.LinkButton lnkLogout;
     }
 }
 ";
@@ -161,7 +171,7 @@ namespace AppGenerator
             #endregion
 
             #region Generisanje MasterPage.Master.cs klase
-            string pathMasterCs = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.cs";
+            string pathMasterCs = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.cs";
 
             string generatedMasterCsString = @"using System;
 using System.Collections.Generic;
@@ -176,7 +186,32 @@ namespace MyGeneratedApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            var user = Context.User.Identity;
+            if (user.IsAuthenticated)
+            {
+                litStatus.Text = Context.User.Identity.Name;
 
+                lnkLogin.Visible = false;
+                lnkRegister.Visible = false;
+
+                lnkLogout.Visible = true;
+                litStatus.Visible = true;
+            }
+            else
+            {
+                lnkLogin.Visible = true;
+                lnkRegister.Visible = true;
+
+                lnkLogout.Visible = false;
+                litStatus.Visible = false;
+            }
+        }
+        protected void lnkLogout_Click(object sender, EventArgs e)
+        {
+            var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
+            authenticationManager.SignOut();
+
+            Response.Redirect(""~/Index.aspx"");
         }
     }
 }";
@@ -365,8 +400,8 @@ a:visited {
 
 ";
 
-            string styleDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Styles";
-            string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Styles\StyleSheet.css";
+            string styleDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Styles";
+            string cssPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Styles\StyleSheet.css";
 
             //Kreiranje foldera Styles za smestanje css fajla
             if (!Directory.Exists(styleDirPath))
@@ -399,7 +434,7 @@ a:visited {
             #endregion
 
 
-            string imagesDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Images";
+            string imagesDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Images";
             if (!Directory.Exists(imagesDirPath))
             {
                 Directory.CreateDirectory(imagesDirPath);
@@ -412,7 +447,7 @@ a:visited {
                 File.WriteAllText(csprojPath, csprojEdited);
             }
 
-            string modelsDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Models";
+            string modelsDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Models";
             if (!Directory.Exists(modelsDirPath))
             {
                 Directory.CreateDirectory(modelsDirPath);
@@ -430,7 +465,7 @@ a:visited {
 
             PageGenerator.GeneratePageItem(myAppName, xml, csprojPath);
 
-            string acountDirPath = @"C:\Users\nikola.bastovanovic\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account";
+            string acountDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account";
             if (!Directory.Exists(acountDirPath))
             {
                 Directory.CreateDirectory(acountDirPath);
