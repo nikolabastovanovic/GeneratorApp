@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace AppGenerator
 {
@@ -26,7 +27,15 @@ namespace AppGenerator
         {
             string pages = txtPageNames.Text;
             int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
-            string[] pageNames = new string[countComas + 1];
+            string[] pageNames = new string[50];
+
+            List<string> pageList = new List<string>();
+            XmlDocument xml = new XmlDocument();
+            xml.Load(@"C:\Users\Johny\AppGenerator\Gramer.xml");
+            foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
+            {
+                pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
+            }
 
             //Uklanjanje praznih karaktera 
             for (int i = 0; i < pageNames.Length; i++)
@@ -48,7 +57,7 @@ namespace AppGenerator
 
             string generatedHtmlString = string.Empty;
 
-            for (int y = 0; y < pageNames.Length; y++)
+            for (int y = 0; y < pageList.Count; y++)
             {
                 //Mora biti u petlji kako se kod ne bi ponavljao i kreirao sve vise puta..
                 StringBuilder sb = new StringBuilder("<!DOCTYPE html>" + Environment.NewLine);
@@ -66,7 +75,7 @@ namespace AppGenerator
                     writer.WriteLine();
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Title);
-                    writer.Write("Page Title" + pageNames[y]);
+                    writer.Write("Page Title" + pageList[y]);
                     writer.RenderEndTag(); //end title
                     writer.WriteLine();
 
@@ -91,11 +100,11 @@ namespace AppGenerator
 
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "navbar");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    for (int menuTabs = 0; menuTabs < pageNames.Length; menuTabs++)
+                    for (int menuTabs = 0; menuTabs < pageList.Count; menuTabs++)
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Href, pageNames[menuTabs] + ".html");
+                        writer.AddAttribute(HtmlTextWriterAttribute.Href, pageList[menuTabs] + ".html");
                         writer.RenderBeginTag(HtmlTextWriterTag.A);
-                        writer.Write(pageNames[menuTabs]);
+                        writer.Write(pageList[menuTabs]);
                         writer.RenderEndTag(); //end a
                         writer.WriteLine();
                     }
@@ -104,73 +113,81 @@ namespace AppGenerator
 
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "row");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    if (checkBoxCreateSideBar.Checked)
+                    foreach (XmlNode xmlNodePageSideBar in xml.GetElementsByTagName("sideBarDesc"))
                     {
-                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
-                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                        writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                        writer.Write("About me");
-                        writer.RenderEndTag();
-                        writer.WriteLine();
-                        writer.RenderBeginTag(HtmlTextWriterTag.H5);
-                        writer.Write("Photo of me:");
-                        writer.RenderEndTag();
-                        writer.WriteLine();
-                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                        writer.Write("Image");
-                        writer.RenderEndTag();
-                        writer.WriteLine();
-                        writer.RenderBeginTag(HtmlTextWriterTag.P);
+                        if (xmlNodePageSideBar.ParentNode.ParentNode.FirstChild.InnerText == pageList[y])
+                        {
+                            writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
+                            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                            writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                            writer.Write("About me");
+                            writer.RenderEndTag();
+                            writer.WriteLine();
+                            writer.RenderBeginTag(HtmlTextWriterTag.H5);
+                            writer.Write("Photo of me:");
+                            writer.RenderEndTag();
+                            writer.WriteLine();
+                            writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                            writer.Write("Image");
+                            writer.RenderEndTag();
+                            writer.WriteLine();
+                            writer.RenderBeginTag(HtmlTextWriterTag.P);
+                            writer.Write(xmlNodePageSideBar.InnerText);
 
-                        //Tekst iz generisanog textbox-a
-                        TextBox sideTxtBox = this.Controls.Find("txtSideContent" + pageNames[y], true).FirstOrDefault() as TextBox;
-
-                        writer.Write(sideTxtBox.Text);
-
-                        writer.RenderEndTag();
-                        writer.WriteLine();
-                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                        writer.Write("Advertisement");
-                        writer.RenderEndTag();
-                        writer.WriteLine("<br>");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
-                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
-                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                        writer.Write("Advertisement");
-                        writer.RenderEndTag();
-                        writer.RenderEndTag(); //end div class side
-                        writer.WriteLine();
+                            writer.RenderEndTag();
+                            writer.WriteLine();
+                            writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                            writer.Write("Advertisement");
+                            writer.RenderEndTag();
+                            writer.WriteLine("<br>");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
+                            writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
+                            writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                            writer.Write("Advertisement");
+                            writer.RenderEndTag();
+                            writer.RenderEndTag(); //end div class side
+                            writer.WriteLine();
+                        }
                     }
-
+                    
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "main");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                    writer.Write("Title heading 2");
-                    writer.RenderEndTag();
-                    writer.WriteLine();
-                    writer.RenderBeginTag(HtmlTextWriterTag.H5);
-                    writer.Write("Title description");
-                    writer.RenderEndTag();
-                    writer.WriteLine();
+                    foreach (XmlNode xmlNodePageTitle in xml.GetElementsByTagName("pageName"))
+                    {
+                        if (xmlNodePageTitle.InnerText == pageList[y])
+                        {
+                            if (xmlNodePageTitle.Attributes["title"] != null)
+                            {
+                                writer.RenderBeginTag(HtmlTextWriterTag.H2);
+                                writer.Write(xmlNodePageTitle.Attributes["title"].Value);
+                                writer.RenderEndTag();
+                                writer.WriteLine();
+                            }
+                        }
+                    }
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
                     writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.Write("Image");
                     writer.RenderEndTag();
                     writer.WriteLine();
-                    writer.RenderBeginTag(HtmlTextWriterTag.P);
-                    //Tekst iz generisanog textbox-a
-                    TextBox mainTxtBox = this.Controls.Find("txtContent" + pageNames[y], true).FirstOrDefault() as TextBox;
-                    writer.Write(mainTxtBox.Text);
-                    writer.RenderEndTag();
-                    writer.WriteLine();
-                    writer.RenderBeginTag(HtmlTextWriterTag.P);
-                    writer.Write("Some text");
-                    writer.RenderEndTag();
+
+                    foreach (XmlNode xmlNodePageDescription in xml.GetElementsByTagName("description"))
+                    {
+                        if (xmlNodePageDescription.ParentNode.ParentNode.FirstChild.InnerText == pageList[y])
+                        {
+                            writer.RenderBeginTag(HtmlTextWriterTag.P);
+                            writer.Write(xmlNodePageDescription.InnerText);
+                            writer.RenderEndTag();
+                            writer.WriteLine();
+                        }
+                    }
+
+                    
                     writer.RenderEndTag(); //end div class main
 
                     writer.RenderEndTag(); //end div class row
@@ -194,12 +211,12 @@ namespace AppGenerator
                 generatedHtmlString = stringWriter.ToString();
 
                 #region Izmena csproj fajla
-                string csprojPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\GeneratedWebApp.csproj";
+                string csprojPath = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\GeneratedStaticApp.csproj";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
-                if (csprojEdited.Contains(@"<Content Include=""" + pageNames[y] + ".html\"") == false) //zakucan base.html
+                if (csprojEdited.Contains(@"<Content Include=""" + pageList[y] + ".html\"") == false) //zakucan base.html
                 {
-                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageNames[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
+                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageList[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
                     File.WriteAllText(csprojPath, csprojEdited);
                 }
                 if (csprojEdited.Contains(@"<Content Include=""JavaScript.js"" />") == false)
@@ -215,9 +232,9 @@ namespace AppGenerator
                 #endregion
 
                 #region Kreiranje generisanih fajlova
-                string path = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\" + pageNames[y] + ".html";
-                string javaScriptPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\JavaScript.js";
-                string cssPath = @"C:\Users\nikola.bastovanovic\source\repos\GeneratedWebApp\GeneratedWebApp\HelpCSS.css";
+                string path = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\" + pageList[y] + ".html";
+                string javaScriptPath = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\JavaScript.js";
+                string cssPath = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\HelpCSS.css";
 
                 if (File.Exists(path))
                 {
@@ -518,7 +535,7 @@ body {
             if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 filename = openFile.FileName;
-                filename = Path.GetFileName(filename);
+                //filename = Path.GetFileName(filename);
             }
             box.Text += "<br> <img src=\"" + filename + "\" class=\"center\" /> <br>";
         }

@@ -31,9 +31,28 @@
 		</table>
 	</tables>
 	<pages>
-		<pageName>Home</pageName>
-		<pageName>About us</pageName>
-		<pageName>Contact</pageName>
+		<page>
+			<pageName title="Home title">Home</pageName>
+			<pageDescription>
+				<description>Ovo je opis Home stranice</description>
+				<description>Ovo je opis Home stranice dodatak</description>
+				<description>Ovo je opis Home stranice dodatak dodatka</description>
+				<sideBarDesc>Ovo je opis Home stranice side bar-a</sideBarDesc>
+			</pageDescription>
+		</page>
+		<page>
+			<pageName title = "About us Title">About us</pageName>
+			<pageDescription>
+				<description>Ovo je opis About us stranice</description>
+			</pageDescription>
+		</page>
+		<page>
+			<pageName title = "Contact Title">Contact</pageName>
+			<pageDescription>
+				<description>Ovo je opis Contact stranice</description>
+				<sideBarDesc>Ovo je opis Contact stranice side bar-a</sideBarDesc>
+			</pageDescription>
+		</page>
 	</pages>
 </gramer>
 
