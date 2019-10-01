@@ -19,41 +19,43 @@ namespace AppGenerator
         public FormGenerator()
         {
             InitializeComponent();
-            comboBoxPagesCollection.Text = "Choose page to add content..";
-            comboBoxPagesCollection.Enabled = false;
+            StartPosition = FormStartPosition.CenterScreen;
+        }
+
+        public string filename = string.Empty;
+        public string grammer = string.Empty;
+        private void BtnBrowseGrammer_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "XML Files (*.xml)|*.xml";
+            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                grammer = openFile.FileName;
+            }
+            txtGrammer.Text = grammer;
+            btnBrowse.Enabled = true;
+        }
+
+        private void BtnBrowse_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folder = new FolderBrowserDialog();
+            if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = folder.SelectedPath;
+            }
+            txtPath.Text = filename;
+            button1.Enabled = true;
         }
 
         private void GenerateButton(object sender, EventArgs e)
         {
-            string pages = txtPageNames.Text;
-            int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
-            string[] pageNames = new string[50];
-
             List<string> pageList = new List<string>();
             XmlDocument xml = new XmlDocument();
-            xml.Load(@"C:\Users\Johny\AppGenerator\Gramer.xml");
+            xml.Load(grammer);
             foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
             }
-
-            //Uklanjanje praznih karaktera 
-            for (int i = 0; i < pageNames.Length; i++)
-            {
-                string pageName = string.Empty;
-                if (txtPageNames.Text.Contains(",") == true)
-                {
-                    pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
-                    txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
-                }
-                else
-                {
-                    pageName = txtPageNames.Text;
-                }
-
-                pageNames[i] = pageName.Trim();
-            }
-            txtPageNames.Text = pages;
 
             string generatedHtmlString = string.Empty;
 
@@ -196,7 +198,7 @@ namespace AppGenerator
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "footer");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                    writer.Write("Footer");
+                    writer.Write(xml.SelectSingleNode("gramer/footer").InnerText);
                     writer.RenderEndTag();
                     writer.RenderEndTag(); //end div class footer
 
@@ -211,7 +213,7 @@ namespace AppGenerator
                 generatedHtmlString = stringWriter.ToString();
 
                 #region Izmena csproj fajla
-                string csprojPath = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\GeneratedStaticApp.csproj";
+                string csprojPath = filename + @"\GeneratedStaticApp.csproj";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
                 if (csprojEdited.Contains(@"<Content Include=""" + pageList[y] + ".html\"") == false) //zakucan base.html
@@ -232,9 +234,9 @@ namespace AppGenerator
                 #endregion
 
                 #region Kreiranje generisanih fajlova
-                string path = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\" + pageList[y] + ".html";
-                string javaScriptPath = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\JavaScript.js";
-                string cssPath = @"C:\Users\Johny\source\repos\GeneratedStaticApp\GeneratedStaticApp\HelpCSS.css";
+                string path = filename + @"\" + pageList[y] + ".html";
+                string javaScriptPath = filename + @"\JavaScript.js";
+                string cssPath = filename + @"\HelpCSS.css";
 
                 if (File.Exists(path))
                 {
@@ -400,145 +402,145 @@ body {
     width: 30%;
 }";
 
-        private void ComboBoxPagesCollection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string choosen = comboBoxPagesCollection.SelectedItem.ToString();
-            buttonInsertImage.Visible = true;
-            //KeyPressEventArgs key = new KeyPressEventArgs((char)Keys.K);
-            //TxtPageNames_KeyPress(null, key);
-            if (choosen.Contains("side bar"))
-            {
-                TextBox box = this.Controls.Find("txtSideContent" + choosen.Substring(0, choosen.IndexOf(" ")), true).FirstOrDefault() as TextBox;
-                box.Visible = true;
-                box.BringToFront();
-            }
-            else
-            {
-                TextBox box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
-                box.Visible = true;
-                box.BringToFront();
-            }
-        }
+        //private void ComboBoxPagesCollection_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    string choosen = comboBoxPagesCollection.SelectedItem.ToString();
+        //    buttonInsertImage.Visible = true;
+        //    //KeyPressEventArgs key = new KeyPressEventArgs((char)Keys.K);
+        //    //TxtPageNames_KeyPress(null, key);
+        //    if (choosen.Contains("side bar"))
+        //    {
+        //        TextBox box = this.Controls.Find("txtSideContent" + choosen.Substring(0, choosen.IndexOf(" ")), true).FirstOrDefault() as TextBox;
+        //        box.Visible = true;
+        //        box.BringToFront();
+        //    }
+        //    else
+        //    {
+        //        TextBox box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
+        //        box.Visible = true;
+        //        box.BringToFront();
+        //    }
+        //}
 
-        private void TxtPageNames_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            string initPages = txtPageNames.Text;
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                if (checkBoxCreateSideBar.Checked)
-                    CheckBoxCreateSideBar_CheckedChanged(sender, e);
+        //private void TxtPageNames_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    string initPages = txtPageNames.Text;
+        //    if (e.KeyChar == (char)Keys.Enter)
+        //    {
+        //        if (checkBoxCreateSideBar.Checked)
+        //            CheckBoxCreateSideBar_CheckedChanged(sender, e);
 
-                int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
-                string[] pageNames = new string[countComas + 1];
-                comboBoxPagesCollection.Enabled = true;
+        //        int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
+        //        string[] pageNames = new string[countComas + 1];
+        //        comboBoxPagesCollection.Enabled = true;
 
-                //Uklanjanje praznih karaktera 
-                for (int i = 0; i < pageNames.Length; i++)
-                {
-                    string pageName = string.Empty;
-                    if (txtPageNames.Text.Contains(",") == true)
-                    {
-                        pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
-                        txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+        //        //Uklanjanje praznih karaktera 
+        //        for (int i = 0; i < pageNames.Length; i++)
+        //        {
+        //            string pageName = string.Empty;
+        //            if (txtPageNames.Text.Contains(",") == true)
+        //            {
+        //                pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
+        //                txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
 
-                        if (comboBoxPagesCollection.Items.Contains(pageName.Trim()) == false)
-                            comboBoxPagesCollection.Items.Add(pageName.Trim());
+        //                if (comboBoxPagesCollection.Items.Contains(pageName.Trim()) == false)
+        //                    comboBoxPagesCollection.Items.Add(pageName.Trim());
 
-                        TextBox txtBox = new TextBox();
-                        txtBox.Name = "txtContent" + pageName.Trim();
-                        txtBox.Multiline = true;
-                        txtBox.Text = pageName.Trim();
-                        txtBox.Location = new Point(12, 65);
-                        txtBox.Size = new Size(378, 178);
-                        txtBox.Visible = false;
-                        this.Controls.Add(txtBox);
-                    }
-                    else
-                    {
-                        pageName = txtPageNames.Text;
+        //                TextBox txtBox = new TextBox();
+        //                txtBox.Name = "txtContent" + pageName.Trim();
+        //                txtBox.Multiline = true;
+        //                txtBox.Text = pageName.Trim();
+        //                txtBox.Location = new Point(12, 65);
+        //                txtBox.Size = new Size(378, 178);
+        //                txtBox.Visible = false;
+        //                this.Controls.Add(txtBox);
+        //            }
+        //            else
+        //            {
+        //                pageName = txtPageNames.Text;
 
-                        if (comboBoxPagesCollection.Items.Contains(pageName.Trim()) == false)
-                            comboBoxPagesCollection.Items.Add(pageName.Trim());
+        //                if (comboBoxPagesCollection.Items.Contains(pageName.Trim()) == false)
+        //                    comboBoxPagesCollection.Items.Add(pageName.Trim());
 
-                        TextBox txtBox = new TextBox();
-                        txtBox.Name = "txtContent" + pageName.Trim();
-                        txtBox.Multiline = true;
-                        txtBox.Text = pageName.Trim();
-                        txtBox.Location = new Point(12, 65);
-                        txtBox.Size = new Size(378, 178);
-                        txtBox.Visible = false;
-                        this.Controls.Add(txtBox);
-                    }
-                }
-                txtPageNames.Text = initPages;
-            }
-        }
+        //                TextBox txtBox = new TextBox();
+        //                txtBox.Name = "txtContent" + pageName.Trim();
+        //                txtBox.Multiline = true;
+        //                txtBox.Text = pageName.Trim();
+        //                txtBox.Location = new Point(12, 65);
+        //                txtBox.Size = new Size(378, 178);
+        //                txtBox.Visible = false;
+        //                this.Controls.Add(txtBox);
+        //            }
+        //        }
+        //        txtPageNames.Text = initPages;
+        //    }
+        //}
 
-        private void CheckBoxCreateSideBar_CheckedChanged(object sender, EventArgs e)
-        {
-            string initPages = txtPageNames.Text;
-            int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
-            string[] pageNames = new string[countComas + 1];
-            comboBoxPagesCollection.Enabled = true;
+        //private void CheckBoxCreateSideBar_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    string initPages = txtPageNames.Text;
+        //    int countComas = Regex.Matches(txtPageNames.Text, ",").Count;
+        //    string[] pageNames = new string[countComas + 1];
+        //    comboBoxPagesCollection.Enabled = true;
 
-            //Uklanjanje praznih karaktera 
-            for (int i = 0; i < pageNames.Length; i++)
-            {
-                string pageName = string.Empty;
-                if (txtPageNames.Text.Contains(",") == true)
-                {
-                    pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
-                    txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
+        //    //Uklanjanje praznih karaktera 
+        //    for (int i = 0; i < pageNames.Length; i++)
+        //    {
+        //        string pageName = string.Empty;
+        //        if (txtPageNames.Text.Contains(",") == true)
+        //        {
+        //            pageName = txtPageNames.Text.Substring(0, txtPageNames.Text.IndexOf(","));
+        //            txtPageNames.Text = txtPageNames.Text.Substring(txtPageNames.Text.IndexOf(",") + 1);
 
-                    if (comboBoxPagesCollection.Items.Contains(pageName.Trim() + " side bar") == false)
-                        comboBoxPagesCollection.Items.Add(pageName.Trim() + " side bar");
+        //            if (comboBoxPagesCollection.Items.Contains(pageName.Trim() + " side bar") == false)
+        //                comboBoxPagesCollection.Items.Add(pageName.Trim() + " side bar");
 
-                    TextBox txtBox = new TextBox();
-                    txtBox.Name = "txtSideContent" + pageName.Trim();
-                    txtBox.Multiline = true;
-                    txtBox.Text = pageName.Trim() + " side bar content";
-                    txtBox.Location = new Point(12, 65);
-                    txtBox.Size = new Size(378, 178);
-                    txtBox.Visible = false;
-                    this.Controls.Add(txtBox);
-                }
-                else
-                {
-                    pageName = txtPageNames.Text;
+        //            TextBox txtBox = new TextBox();
+        //            txtBox.Name = "txtSideContent" + pageName.Trim();
+        //            txtBox.Multiline = true;
+        //            txtBox.Text = pageName.Trim() + " side bar content";
+        //            txtBox.Location = new Point(12, 65);
+        //            txtBox.Size = new Size(378, 178);
+        //            txtBox.Visible = false;
+        //            this.Controls.Add(txtBox);
+        //        }
+        //        else
+        //        {
+        //            pageName = txtPageNames.Text;
 
-                    if (comboBoxPagesCollection.Items.Contains(pageName.Trim() + " side bar") == false)
-                        comboBoxPagesCollection.Items.Add(pageName.Trim() + " side bar");
+        //            if (comboBoxPagesCollection.Items.Contains(pageName.Trim() + " side bar") == false)
+        //                comboBoxPagesCollection.Items.Add(pageName.Trim() + " side bar");
 
-                    TextBox txtBox = new TextBox();
-                    txtBox.Name = "txtSideContent" + pageName.Trim();
-                    txtBox.Multiline = true;
-                    txtBox.Text = pageName.Trim() + " side bar content";
-                    txtBox.Location = new Point(12, 65);
-                    txtBox.Size = new Size(378, 178);
-                    txtBox.Visible = false;
-                    this.Controls.Add(txtBox);
-                }
-            }
-            txtPageNames.Text = initPages;
-        }
+        //            TextBox txtBox = new TextBox();
+        //            txtBox.Name = "txtSideContent" + pageName.Trim();
+        //            txtBox.Multiline = true;
+        //            txtBox.Text = pageName.Trim() + " side bar content";
+        //            txtBox.Location = new Point(12, 65);
+        //            txtBox.Size = new Size(378, 178);
+        //            txtBox.Visible = false;
+        //            this.Controls.Add(txtBox);
+        //        }
+        //    }
+        //    txtPageNames.Text = initPages;
+        //}
 
-        private void ButtonInsertImage_Click(object sender, EventArgs e)
-        {
-            TextBox box = new TextBox();
-            string choosen = comboBoxPagesCollection.SelectedItem.ToString();
-            if (choosen.Contains("side bar"))
-                box = this.Controls.Find("txtSideContent" + choosen.Substring(0, choosen.IndexOf(" ")), true).FirstOrDefault() as TextBox;
-            else
-                box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
-            string filename = string.Empty;
-            OpenFileDialog openFile = new OpenFileDialog();
-            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                filename = openFile.FileName;
-                //filename = Path.GetFileName(filename);
-            }
-            box.Text += "<br> <img src=\"" + filename + "\" class=\"center\" /> <br>";
-        }
+        //private void ButtonInsertImage_Click(object sender, EventArgs e)
+        //{
+        //    TextBox box = new TextBox();
+        //    string choosen = comboBoxPagesCollection.SelectedItem.ToString();
+        //    if (choosen.Contains("side bar"))
+        //        box = this.Controls.Find("txtSideContent" + choosen.Substring(0, choosen.IndexOf(" ")), true).FirstOrDefault() as TextBox;
+        //    else
+        //        box = this.Controls.Find("txtContent" + choosen, true).FirstOrDefault() as TextBox;
+        //    string filename = string.Empty;
+        //    OpenFileDialog openFile = new OpenFileDialog();
+        //    if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //    {
+        //        filename = openFile.FileName;
+        //        //filename = Path.GetFileName(filename);
+        //    }
+        //    box.Text += "<br> <img src=\"" + filename + "\" class=\"center\" /> <br>";
+        //}
 
         private void FormGenerator_FormClosing(object sender, FormClosingEventArgs e)
         {
