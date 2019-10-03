@@ -17,6 +17,7 @@ namespace AppGenerator
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormGenerator());
+            ENV
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Build.BuildEngine;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,6 +23,7 @@ namespace AppGenerator
 
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
+
             #region Update csproj fajla
             string csprojPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MyGeneratedApp.csproj";
             string csprojEdited = File.ReadAllText(csprojPath);

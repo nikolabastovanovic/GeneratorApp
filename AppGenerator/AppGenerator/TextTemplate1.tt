@@ -8,7 +8,7 @@
 <#
  // Read the model file
  XmlDocument doc = new XmlDocument();
- doc.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
+ doc.Load(@"C:\Users\Johny\AppGenerator\Gramer.xml");
 
  string myAppName = string.Empty;
  XmlNode myAppNameNode = doc.SelectSingleNode(@"gramer/app_name");
@@ -46,39 +46,90 @@ namespace <#= myAppName #>.Models
 			    return "Error: " + e;
 			}
 		}
-	}
 
-	public string Update<#= modelName #>(int id, <#= modelName #> <#= modelName.ToLower() #>)
-    {
-        try
-        {
-            <#= dbName #>Entities db = new <#= dbName #>Entities();
-            <#= modelName #> tmp = db.<#= modelName #>s.Find(id);
+		public string Update<#= modelName #>(int id, <#= modelName #> <#= modelName.ToLower() #>)
+		{
+		    try
+		    {
+				<#= dbName #>Entities db = new <#= dbName #>Entities();
+		        <#= modelName #> tmp = db.<#= modelName #>s.Find(id);
 
-			<#
-			foreach (XmlNode xmlNodeTableColumns in doc.GetElementsByTagName("column"))
-            {
-                string modelColumnName = xmlNodeTableColumns.InnerText;
-                if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
-                {
-			#>
-			tmp.<#= modelColumnName #> = <#= modelName.ToLower() #>.<#= modelColumnName #>
-			<#
+				<#
+				foreach (XmlNode xmlNodeTableColumns in doc.GetElementsByTagName("column"))
+		        {
+		            string modelColumnName = xmlNodeTableColumns.InnerText;
+		            if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+		            {
+				#>
+				tmp.<#= modelColumnName #> = <#= modelName.ToLower() #>.<#= modelColumnName #>;
+				<#
+					}
 				}
-			}
-			#>
+				#>
 
-			db.SaveChanges();
-            return product.ID + " was succesufully updated.";
-         }
-         catch (Exception e)
-         {
-             return "Error: " + e;
-         }
+				db.SaveChanges();
+		        return <#= modelName.ToLower() #>.ID + " was succesufully updated.";
+		    }
+		    catch (Exception e)
+		    {
+		        return "Error: " + e;
+			}
+		}
+
+		public string Delete<#= modelName #>(int id)
+		{
+		    try
+		    {
+		        <#= dbName #>Entities db = new <#= dbName #>Entities();
+		        <#= modelName #> <#= modelName.ToLower() #> = db.<#= modelName #>s.Find(id);
+
+		        db.<#= modelName #>s.Attach(<#= modelName.ToLower() #>);
+		        db.<#= modelName #>s.Remove(<#= modelName.ToLower() #>);
+		        db.SaveChanges();
+
+		        return <#= modelName.ToLower() #>.ID + " was succesufully deleted.";
+		    }
+		    catch (Exception e)
+		    {
+		        return "Error: " + e;
+		    }
+		}
+
+		public <#= modelName #> Get<#= modelName #>(int id)
+		{
+		    try
+		    {
+		        using (<#= dbName #>Entities db = new <#= dbName #>Entities())
+		        {
+		            <#= modelName #> <#= modelName.ToLower() #> = db.<#= modelName #>s.Find(id);
+		            return <#= modelName.ToLower() #>;
+		        }
+		    }
+		    catch (Exception)
+		    {
+		        return null;
+		    }
+		}
+
+		public List<<#= modelName #>> GetAll<#= modelName #>s()
+		{
+		    try
+		    {
+		        using(<#= dbName #>Entities db = new <#= dbName #>Entities())
+		        {
+		            List<<#= modelName #>> <#= modelName.ToLower() #>s = (from x in db.<#= modelName #>s select x).ToList();
+		            return <#= modelName.ToLower() #>s;
+		        }
+		    }
+		    catch (Exception)
+		    {
+		        return null;
+		    }
+		}
 	}
 }
 <#
-string outputFileName = modelName + ".aspx.cs";
+string outputFileName = modelName + "Model.aspx.cs";
 
 string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
   string outputFilePath = Path.Combine(templateDirectory, outputFileName);
