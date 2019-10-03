@@ -24,4 +24,32 @@ namespace MyGeneratedApp.Models
 			}
 		}
 	}
+
+	public string UpdatePurchase(int id, Purchase purchase)
+    {
+        try
+        {
+            GarageEntities db = new GarageEntities();
+            Purchase tmp = db.Purchases.Find(id);
+
+			
+			tmp.CustomerID = purchase.CustomerID
+			
+			tmp.ProductID = purchase.ProductID
+			
+			tmp.Amount = purchase.Amount
+			
+			tmp.Date = purchase.Date
+			
+			tmp.IsInCart = purchase.IsInCart
+			
+
+			db.SaveChanges();
+            return product.ID + " was succesufully updated.";
+         }
+         catch (Exception e)
+         {
+             return "Error: " + e;
+         }
+	}
 }

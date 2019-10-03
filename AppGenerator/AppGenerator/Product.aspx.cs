@@ -24,4 +24,32 @@ namespace MyGeneratedApp.Models
 			}
 		}
 	}
+
+	public string UpdateProduct(int id, Product product)
+    {
+        try
+        {
+            GarageEntities db = new GarageEntities();
+            Product tmp = db.Products.Find(id);
+
+			
+			tmp.TypeID = product.TypeID
+			
+			tmp.Name = product.Name
+			
+			tmp.Price = product.Price
+			
+			tmp.Description = product.Description
+			
+			tmp.Image = product.Image
+			
+
+			db.SaveChanges();
+            return product.ID + " was succesufully updated.";
+         }
+         catch (Exception e)
+         {
+             return "Error: " + e;
+         }
+	}
 }

@@ -47,6 +47,35 @@ namespace <#= myAppName #>.Models
 			}
 		}
 	}
+
+	public string Update<#= modelName #>(int id, <#= modelName #> <#= modelName.ToLower() #>)
+    {
+        try
+        {
+            <#= dbName #>Entities db = new <#= dbName #>Entities();
+            <#= modelName #> tmp = db.<#= modelName #>s.Find(id);
+
+			<#
+			foreach (XmlNode xmlNodeTableColumns in doc.GetElementsByTagName("column"))
+            {
+                string modelColumnName = xmlNodeTableColumns.InnerText;
+                if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+                {
+			#>
+			tmp.<#= modelColumnName #> = <#= modelName.ToLower() #>.<#= modelColumnName #>
+			<#
+				}
+			}
+			#>
+
+			db.SaveChanges();
+            return product.ID + " was succesufully updated.";
+         }
+         catch (Exception e)
+         {
+             return "Error: " + e;
+         }
+	}
 }
 <#
 string outputFileName = modelName + ".aspx.cs";
