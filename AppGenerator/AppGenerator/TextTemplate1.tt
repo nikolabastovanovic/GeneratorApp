@@ -1,0 +1,61 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Xml"#>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+ // Read the model file
+ XmlDocument doc = new XmlDocument();
+ doc.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
+
+ string myAppName = string.Empty;
+ XmlNode myAppNameNode = doc.SelectSingleNode(@"gramer/app_name");
+ myAppName = myAppNameNode.InnerText; //Naziv aplikacije
+ XmlNode dbNameNode = doc.SelectSingleNode(@"gramer/db_name");
+ string dbName = dbNameNode.InnerText; //Naziv baze
+
+ // Generate the code
+ foreach (XmlNode xmlNodeTableName in doc.GetElementsByTagName("name"))
+ {
+	string modelName = xmlNodeTableName.InnerText;
+#>
+using <#= myAppName #>;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace <#= myAppName #>.Models
+{
+	public partial class <#= modelName #>Model 
+	{
+		public string Insert<#= modelName #>(<#= modelName #> <#= modelName.ToLower() #>)
+		{
+			try
+			{
+				<#= dbName #>Entities db = new <#= dbName #>Entities();
+				db.<#= modelName #>s.Add(<#= modelName.ToLower() #>);
+				db.SaveChanges();
+
+				return <#= modelName.ToLower() #>.ID + " was succesufully inserted.";
+			}
+			catch (Exception e)
+			{
+			    return "Error: " + e;
+			}
+		}
+	}
+}
+<#
+string outputFileName = modelName + ".aspx.cs";
+
+string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+  string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+  File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+  this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+
+ }
+#>
+
