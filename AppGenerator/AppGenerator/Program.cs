@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace AppGenerator
 {
@@ -16,8 +17,8 @@ namespace AppGenerator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormGenerator());
-            ENV
+            Application.Run(new DinamicAppGenerator());
+
         }
     }
 }

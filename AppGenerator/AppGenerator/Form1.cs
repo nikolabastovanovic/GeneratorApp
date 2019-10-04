@@ -213,7 +213,7 @@ namespace AppGenerator
                 generatedHtmlString = stringWriter.ToString();
 
                 #region Izmena csproj fajla
-                string csprojPath = filename + @"\GeneratedStaticApp.csproj";
+                string csprojPath = filename + @"\GeneratedWebApp.csproj";
                 string csprojEdited = File.ReadAllText(csprojPath);
                 int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
                 if (csprojEdited.Contains(@"<Content Include=""" + pageList[y] + ".html\"") == false) //zakucan base.html

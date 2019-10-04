@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using Microsoft.VisualStudio.TextTemplating;
+using System.Web;
 
 namespace AppGenerator
 {
@@ -23,6 +26,18 @@ namespace AppGenerator
 
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
+            var proces = new Process
+            {
+                StartInfo =
+                {
+                    FileName = "TextTransform.exe",
+                    Arguments = "TextTemplate1.tt"
+                }
+            };
+
+            proces.Start();
+            proces.WaitForExit();
+
 
             #region Update csproj fajla
             string csprojPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MyGeneratedApp.csproj";
