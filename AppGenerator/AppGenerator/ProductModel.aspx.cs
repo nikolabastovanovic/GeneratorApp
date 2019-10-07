@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
 namespace MyGeneratedApp.Models
 {
 	public partial class ProductModel 
@@ -15,6 +16,7 @@ namespace MyGeneratedApp.Models
 			{
 				GarageEntities db = new GarageEntities();
 				db.Products.Add(product);
+				BeforeInsert(product);
 				db.SaveChanges();
 
 				return product.ID + " was succesufully inserted.";
@@ -38,6 +40,7 @@ namespace MyGeneratedApp.Models
 								tmp.Description = product.Description;
 								tmp.Image = product.Image;
 				
+				BeforeUpdate(product);
 				db.SaveChanges();
 		        return product.ID + " was succesufully updated.";
 		    }
@@ -56,6 +59,7 @@ namespace MyGeneratedApp.Models
 
 		        db.Products.Attach(product);
 		        db.Products.Remove(product);
+				BeforeDelete(id);
 		        db.SaveChanges();
 
 		        return product.ID + " was succesufully deleted.";
@@ -73,6 +77,7 @@ namespace MyGeneratedApp.Models
 		        using (GarageEntities db = new GarageEntities())
 		        {
 		            Product product = db.Products.Find(id);
+					BeforeGetDetails(product);
 		            return product;
 		        }
 		    }
@@ -89,6 +94,7 @@ namespace MyGeneratedApp.Models
 		        using(GarageEntities db = new GarageEntities())
 		        {
 		            List<Product> products = (from x in db.Products select x).ToList();
+					BeforeGetList(products);
 		            return products;
 		        }
 		    }
@@ -97,5 +103,11 @@ namespace MyGeneratedApp.Models
 		        return null;
 		    }
 		}
+
+		partial void BeforeInsert(Product product);
+		partial void BeforeUpdate(Product product);
+		partial void BeforeDelete(int id);
+		partial void BeforeGetDetails(Product product);
+		partial void BeforeGetList(List<Product> products);
 	}
 }

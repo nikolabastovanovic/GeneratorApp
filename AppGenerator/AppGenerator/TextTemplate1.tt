@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
 namespace <#= myAppName #>.Models
 {
 	public partial class <#= modelName #>Model 
@@ -37,6 +38,7 @@ namespace <#= myAppName #>.Models
 			{
 				<#= dbName #>Entities db = new <#= dbName #>Entities();
 				db.<#= modelName #>s.Add(<#= modelName.ToLower() #>);
+				BeforeInsert(<#= modelName.ToLower() #>);
 				db.SaveChanges();
 
 				return <#= modelName.ToLower() #>.ID + " was succesufully inserted.";
@@ -67,6 +69,7 @@ namespace <#= myAppName #>.Models
 				}
 				#>
 
+				BeforeUpdate(<#= modelName.ToLower() #>);
 				db.SaveChanges();
 		        return <#= modelName.ToLower() #>.ID + " was succesufully updated.";
 		    }
@@ -85,6 +88,7 @@ namespace <#= myAppName #>.Models
 
 		        db.<#= modelName #>s.Attach(<#= modelName.ToLower() #>);
 		        db.<#= modelName #>s.Remove(<#= modelName.ToLower() #>);
+				BeforeDelete(id);
 		        db.SaveChanges();
 
 		        return <#= modelName.ToLower() #>.ID + " was succesufully deleted.";
@@ -102,6 +106,7 @@ namespace <#= myAppName #>.Models
 		        using (<#= dbName #>Entities db = new <#= dbName #>Entities())
 		        {
 		            <#= modelName #> <#= modelName.ToLower() #> = db.<#= modelName #>s.Find(id);
+					BeforeGetDetails(<#= modelName.ToLower() #>);
 		            return <#= modelName.ToLower() #>;
 		        }
 		    }
@@ -118,6 +123,7 @@ namespace <#= myAppName #>.Models
 		        using(<#= dbName #>Entities db = new <#= dbName #>Entities())
 		        {
 		            List<<#= modelName #>> <#= modelName.ToLower() #>s = (from x in db.<#= modelName #>s select x).ToList();
+					BeforeGetList(<#= modelName.ToLower() #>s);
 		            return <#= modelName.ToLower() #>s;
 		        }
 		    }
@@ -126,6 +132,12 @@ namespace <#= myAppName #>.Models
 		        return null;
 		    }
 		}
+
+		partial void BeforeInsert(<#= modelName #> <#= modelName.ToLower() #>);
+		partial void BeforeUpdate(<#= modelName #> <#= modelName.ToLower() #>);
+		partial void BeforeDelete(int id);
+		partial void BeforeGetDetails(<#= modelName #> <#= modelName.ToLower() #>);
+		partial void BeforeGetList(List<<#= modelName #>> <#= modelName.ToLower() #>s);
 	}
 }
 <#

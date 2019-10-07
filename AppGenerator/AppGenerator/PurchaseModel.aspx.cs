@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
 namespace MyGeneratedApp.Models
 {
 	public partial class PurchaseModel 
@@ -15,6 +16,7 @@ namespace MyGeneratedApp.Models
 			{
 				GarageEntities db = new GarageEntities();
 				db.Purchases.Add(purchase);
+				BeforeInsert(purchase);
 				db.SaveChanges();
 
 				return purchase.ID + " was succesufully inserted.";
@@ -38,6 +40,7 @@ namespace MyGeneratedApp.Models
 								tmp.Date = purchase.Date;
 								tmp.IsInCart = purchase.IsInCart;
 				
+				BeforeUpdate(purchase);
 				db.SaveChanges();
 		        return purchase.ID + " was succesufully updated.";
 		    }
@@ -56,6 +59,7 @@ namespace MyGeneratedApp.Models
 
 		        db.Purchases.Attach(purchase);
 		        db.Purchases.Remove(purchase);
+				BeforeDelete(id);
 		        db.SaveChanges();
 
 		        return purchase.ID + " was succesufully deleted.";
@@ -73,6 +77,7 @@ namespace MyGeneratedApp.Models
 		        using (GarageEntities db = new GarageEntities())
 		        {
 		            Purchase purchase = db.Purchases.Find(id);
+					BeforeGetDetails(purchase);
 		            return purchase;
 		        }
 		    }
@@ -89,6 +94,7 @@ namespace MyGeneratedApp.Models
 		        using(GarageEntities db = new GarageEntities())
 		        {
 		            List<Purchase> purchases = (from x in db.Purchases select x).ToList();
+					BeforeGetList(purchases);
 		            return purchases;
 		        }
 		    }
@@ -97,5 +103,11 @@ namespace MyGeneratedApp.Models
 		        return null;
 		    }
 		}
+
+		partial void BeforeInsert(Purchase purchase);
+		partial void BeforeUpdate(Purchase purchase);
+		partial void BeforeDelete(int id);
+		partial void BeforeGetDetails(Purchase purchase);
+		partial void BeforeGetList(List<Purchase> purchases);
 	}
 }

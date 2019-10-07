@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
 namespace MyGeneratedApp.Models
 {
 	public partial class ProductTypeModel 
@@ -15,6 +16,7 @@ namespace MyGeneratedApp.Models
 			{
 				GarageEntities db = new GarageEntities();
 				db.ProductTypes.Add(producttype);
+				BeforeInsert(producttype);
 				db.SaveChanges();
 
 				return producttype.ID + " was succesufully inserted.";
@@ -34,6 +36,7 @@ namespace MyGeneratedApp.Models
 
 								tmp.Name = producttype.Name;
 				
+				BeforeUpdate(producttype);
 				db.SaveChanges();
 		        return producttype.ID + " was succesufully updated.";
 		    }
@@ -52,6 +55,7 @@ namespace MyGeneratedApp.Models
 
 		        db.ProductTypes.Attach(producttype);
 		        db.ProductTypes.Remove(producttype);
+				BeforeDelete(id);
 		        db.SaveChanges();
 
 		        return producttype.ID + " was succesufully deleted.";
@@ -69,6 +73,7 @@ namespace MyGeneratedApp.Models
 		        using (GarageEntities db = new GarageEntities())
 		        {
 		            ProductType producttype = db.ProductTypes.Find(id);
+					BeforeGetDetails(producttype);
 		            return producttype;
 		        }
 		    }
@@ -85,6 +90,7 @@ namespace MyGeneratedApp.Models
 		        using(GarageEntities db = new GarageEntities())
 		        {
 		            List<ProductType> producttypes = (from x in db.ProductTypes select x).ToList();
+					BeforeGetList(producttypes);
 		            return producttypes;
 		        }
 		    }
@@ -93,5 +99,11 @@ namespace MyGeneratedApp.Models
 		        return null;
 		    }
 		}
+
+		partial void BeforeInsert(ProductType producttype);
+		partial void BeforeUpdate(ProductType producttype);
+		partial void BeforeDelete(int id);
+		partial void BeforeGetDetails(ProductType producttype);
+		partial void BeforeGetList(List<ProductType> producttypes);
 	}
 }
