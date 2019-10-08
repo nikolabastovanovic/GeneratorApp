@@ -19,7 +19,7 @@ namespace AppGenerator
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            FormGenerator form = new FormGenerator();
+            StaticAppGenerator form = new StaticAppGenerator();
             form.Show();
             this.Hide();
         }

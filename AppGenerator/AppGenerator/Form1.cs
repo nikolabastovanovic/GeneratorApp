@@ -14,9 +14,9 @@ using System.Xml;
 
 namespace AppGenerator
 {
-    public partial class FormGenerator : Form
+    public partial class StaticAppGenerator : Form
     {
-        public FormGenerator()
+        public StaticAppGenerator()
         {
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;

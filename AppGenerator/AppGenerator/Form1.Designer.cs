@@ -1,6 +1,6 @@
 ﻿namespace AppGenerator
 {
-    partial class FormGenerator
+    partial class StaticAppGenerator
     {
         /// <summary>
         /// Required designer variable.
@@ -104,7 +104,7 @@
             this.btnBrowseGrammer.UseVisualStyleBackColor = true;
             this.btnBrowseGrammer.Click += new System.EventHandler(this.BtnBrowseGrammer_Click);
             // 
-            // FormGenerator
+            // StaticAppGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -117,7 +117,7 @@
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.Name = "FormGenerator";
+            this.Name = "StaticAppGenerator";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormGenerator_FormClosing);
             this.ResumeLayout(false);
