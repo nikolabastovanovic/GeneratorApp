@@ -72,10 +72,10 @@
     <Compile Include="PageGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextTemplate1.cs">
+    <Compile Include="ModelTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TextTemplate1.tt</DependentUpon>
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <EmbeddedResource Include="DinamicAppGenerator.resx">
@@ -110,9 +110,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TextTemplate1.tt">
+    <Content Include="DatabaseScriptTemplate.sql">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DatabaseScriptTemplate.tt</DependentUpon>
+    </Content>
+    <Content Include="DatabaseScriptTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TextTemplate1.cs</LastGenOutput>
+      <LastGenOutput>DatabaseScriptTemplate.sql</LastGenOutput>
+    </Content>
+    <Content Include="ModelTemplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ModelTemplate.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TextTransform.exe">

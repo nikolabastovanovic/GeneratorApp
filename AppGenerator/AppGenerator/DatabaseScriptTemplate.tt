@@ -1,0 +1,89 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml"#>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".sql" #>
+<#
+// Read the model file
+ XmlDocument doc = new XmlDocument();
+ doc.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
+
+ string myAppName = string.Empty;
+ XmlNode myAppNameNode = doc.SelectSingleNode(@"gramer/app_name");
+ myAppName = myAppNameNode.InnerText; //Naziv aplikacije
+ XmlNode dbNameNode = doc.SelectSingleNode(@"gramer/db_name");
+ string dbName = dbNameNode.InnerText; //Naziv baze
+ #>
+ CREATE DATABASE [<#= dbName #>]
+ GO
+
+ USE [<#= dbName #>]
+ GO
+
+ <#
+ foreach (XmlNode xmlNodeTableName in doc.GetElementsByTagName("name"))
+ {
+	string modelName = xmlNodeTableName.InnerText;
+ #>
+	CREATE TABLE [dbo].[<#= modelName #>](
+		[ID] int IDENTITY(1,1) NOT NULL,
+		<#
+		foreach (XmlNode xmlNodeTableColumns in doc.GetElementsByTagName("column"))
+		{
+			string modelColumnType = "";
+		    string modelColumnName = xmlNodeTableColumns.InnerText;
+		    if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+		    {
+				if (xmlNodeTableColumns.Attributes["type"].Value == "int")
+					modelColumnType = "int";
+				else if (xmlNodeTableColumns.Attributes["type"].Value == "string")
+					modelColumnType = "varchar(100)";
+				else if (xmlNodeTableColumns.Attributes["type"].Value == "decimal")
+					modelColumnType = "decimal(18, 2)";
+				else if (xmlNodeTableColumns.Attributes["type"].Value == "image")
+					modelColumnType = "varchar(1000)";
+		#>
+[<#= modelColumnName #>] <#= modelColumnType #>,
+		<#
+			}
+		}
+		#>
+CONSTRAINT [PK_<#= modelName #>] PRIMARY KEY CLUSTERED 
+(
+    [ID] ASC
+)
+) ON [PRIMARY]
+	GO
+
+ <#
+ }
+ #>
+
+ <#
+ foreach (XmlNode xmlNodeTableName in doc.GetElementsByTagName("name"))
+ {
+	string modelName = xmlNodeTableName.InnerText;
+	foreach (XmlNode xmlNodeTableColumns in doc.GetElementsByTagName("column"))
+    {
+        string modelColumnName = xmlNodeTableColumns.InnerText;
+        if (xmlNodeTableColumns.ParentNode.ParentNode.FirstChild.InnerText == modelName)
+        {
+			if (xmlNodeTableColumns.Attributes["fk"] != null && xmlNodeTableColumns.Attributes["fk"].Value != "")
+            {
+ #>
+	ALTER TABLE [dbo].[<#= modelName #>] WITH CHECK ADD CONSTRAINT [FK_<#= modelName #><#= xmlNodeTableColumns.Attributes["fk"].Value #>] FOREIGN KEY([<#= modelColumnName #>])
+	REFERENCES [dbo].[<#= xmlNodeTableColumns.Attributes["fk"].Value #>] ([ID])
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
+	GO
+
+ <#
+			}
+		}
+	}
+ }
+ #>
