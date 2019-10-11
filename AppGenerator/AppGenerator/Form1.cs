@@ -122,11 +122,11 @@ namespace AppGenerator
                             writer.AddAttribute(HtmlTextWriterAttribute.Class, "side");
                             writer.RenderBeginTag(HtmlTextWriterTag.Div);
                             writer.RenderBeginTag(HtmlTextWriterTag.H2);
-                            writer.Write("About me");
+                            writer.Write(pageList[y]);
                             writer.RenderEndTag();
                             writer.WriteLine();
                             writer.RenderBeginTag(HtmlTextWriterTag.H5);
-                            writer.Write("Photo of me:");
+                            writer.Write("<i>Place your favorite image here</i>");
                             writer.RenderEndTag();
                             writer.WriteLine();
                             writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
@@ -174,7 +174,7 @@ namespace AppGenerator
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "fakeimg");
                     writer.AddAttribute(HtmlTextWriterAttribute.Style, "height:200px;");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
-                    writer.Write("Image");
+                    writer.Write("Bunner");
                     writer.RenderEndTag();
                     writer.WriteLine();
 
@@ -182,7 +182,17 @@ namespace AppGenerator
                     {
                         if (xmlNodePageDescription.ParentNode.ParentNode.FirstChild.InnerText == pageList[y])
                         {
+                            string imageSource = string.Empty;
                             writer.RenderBeginTag(HtmlTextWriterTag.P);
+                            if (xmlNodePageDescription.InnerText.Contains("ImageSource"))
+                            {
+                                imageSource = xmlNodePageDescription.InnerText.Substring(xmlNodePageDescription.InnerText.IndexOf("ImageSource(") + 13, xmlNodePageDescription.InnerText.IndexOf(")") - (xmlNodePageDescription.InnerText.IndexOf("ImageSource(") + 14));
+                                xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Replace("\"" + imageSource + "\"", " ");
+                                xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Insert(xmlNodePageDescription.InnerText.IndexOf("ImageSource(") + 13, "<img src=" + "\"" + imageSource + "\"" + "/>");
+                                xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Replace("ImageSource(", " ");
+                                xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Replace(")", " ");
+                            }
+                            
                             writer.Write(xmlNodePageDescription.InnerText);
                             writer.RenderEndTag();
                             writer.WriteLine();

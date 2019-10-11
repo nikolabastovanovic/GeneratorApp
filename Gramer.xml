@@ -32,18 +32,22 @@
 	</tables>
 	<pages>
 		<page>
-			<pageName title="Home title">Home</pageName>
+			<pageName>Home</pageName>
 			<pageDescription>
-				<description>Ovo je opis Home stranice</description>
-				<description>Ovo je opis Home stranice dodatak</description>
-				<description>Ovo je opis Home stranice dodatak dodatka</description>
-				<sideBarDesc>Ovo je opis Home stranice side bar-a</sideBarDesc>
+				<description>Ovo je opis Home ImageSource("https://www.w3schools.com/images/w3schools_green.jpg") stranice</description>
+				<description>Ovo je opis Home stranice koji ce se nalaziti u sledecem paragrafu. Svaki description tag je tag koji odvaja sledeci tekst u novi paragraf.</description>
+				<description>Ovo je takodje dodatak Home stranici koji ce kao i prethodni biti sadrzan u novom paragrafu.</description>
+				<description><img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" /></description>
+				<sideBarDesc>
+				Sadrzaj koji se unese u ovaj tag, nalazice se u Side-bar-u stranice.
+				Ukoliko se desi da stranica nema ovaj tag, generator ce to prepoznati i nece kreirati side bar na toj stranici.
+				</sideBarDesc>
 			</pageDescription>
 		</page>
 		<page>
 			<pageName title = "About us Title">About us</pageName>
 			<pageDescription>
-				<description>Ovo je opis About us stranice</description>
+				<description>Ovo je opis About us stranice. Ovde se moze videti da ova stranica nema Side-Bar tag, samim tim ni generisana stranica nece imati side-bar.</description>
 			</pageDescription>
 		</page>
 		<page>
@@ -54,7 +58,7 @@
 			</pageDescription>
 		</page>
 	</pages>
-	<footer>Ovo je footer...</footer>
+	<footer>Ovo je footer... Nalazi se na svakoj stranici.</footer>
 </gramer>
 
 <!--
