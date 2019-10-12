@@ -47,11 +47,14 @@ namespace AppGenerator
             button1.Enabled = true;
         }
 
+        string myAppName = string.Empty;
         private void GenerateButton(object sender, EventArgs e)
         {
             List<string> pageList = new List<string>();
             XmlDocument xml = new XmlDocument();
             xml.Load(grammer);
+            XmlNode myAppNameNode = xml.SelectSingleNode(@"gramer/app_name");
+            myAppName = myAppNameNode.InnerText; //Naziv aplikacije
             foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
@@ -222,24 +225,29 @@ namespace AppGenerator
 
                 generatedHtmlString = stringWriter.ToString();
 
+
                 #region Izmena csproj fajla
-                string csprojPath = filename + @"\GeneratedWebApp.csproj";
-                string csprojEdited = File.ReadAllText(csprojPath);
-                int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
-                if (csprojEdited.Contains(@"<Content Include=""" + pageList[y] + ".html\"") == false) //zakucan base.html
-                {
-                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageList[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
-                    File.WriteAllText(csprojPath, csprojEdited);
-                }
-                if (csprojEdited.Contains(@"<Content Include=""JavaScript.js"" />") == false)
-                {
-                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""JavaScript.js""" + " />" + Environment.NewLine + "\t"); //zakucan JavaScript.js
-                    File.WriteAllText(csprojPath, csprojEdited);
-                }
-                if (csprojEdited.Contains(@"<Content Include=""HelpCSS.css"" />") == false)
-                {
-                    csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""HelpCSS.css""" + " />" + Environment.NewLine + "\t"); //zakucan HelpCSS.css
-                    File.WriteAllText(csprojPath, csprojEdited);
+                //Provera da li postoji .csproj fajl
+                if (File.Exists(filename + @"\" + myAppName + ".csproj") == true)
+                    {
+                    string csprojPath = filename + @"\" + myAppName + ".csproj";
+                    string csprojEdited = File.ReadAllText(csprojPath);
+                    int positionToIncludeHTML = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+                    if (csprojEdited.Contains(@"<Content Include=""" + pageList[y] + ".html\"") == false) //zakucan base.html
+                    {
+                        csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""" + pageList[y] + ".html\"" + "" + " />" + Environment.NewLine + "\t"); //zakucan base.html
+                        File.WriteAllText(csprojPath, csprojEdited);
+                    }
+                    if (csprojEdited.Contains(@"<Content Include=""JavaScript.js"" />") == false)
+                    {
+                        csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""JavaScript.js""" + " />" + Environment.NewLine + "\t"); //zakucan JavaScript.js
+                        File.WriteAllText(csprojPath, csprojEdited);
+                    }
+                    if (csprojEdited.Contains(@"<Content Include=""HelpCSS.css"" />") == false)
+                    {
+                        csprojEdited = csprojEdited.Insert(positionToIncludeHTML, @"<Content Include=""HelpCSS.css""" + " />" + Environment.NewLine + "\t"); //zakucan HelpCSS.css
+                        File.WriteAllText(csprojPath, csprojEdited);
+                    }
                 }
                 #endregion
 

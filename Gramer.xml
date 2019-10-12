@@ -1,5 +1,5 @@
 <gramer>
-	<app_name>MyGeneratedApp</app_name>
+	<app_name>GeneratedStaticApp</app_name>
 	<banner_image>C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Images\BannerCar.jpg</banner_image>
 	<db_name>Garage</db_name>
 	<tables>

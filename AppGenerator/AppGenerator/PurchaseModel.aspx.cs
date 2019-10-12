@@ -1,12 +1,12 @@
  
-using MyGeneratedApp;
+using GeneratedStaticApp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 
-namespace MyGeneratedApp.Models
+namespace GeneratedStaticApp.Models
 {
 	public partial class PurchaseModel 
 	{

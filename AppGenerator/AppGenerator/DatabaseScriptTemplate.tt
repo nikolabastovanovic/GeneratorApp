@@ -10,7 +10,7 @@
 <#
 // Read the model file
  XmlDocument doc = new XmlDocument();
- doc.Load(@"C:\Users\nikola.bastovanovic\source\repos\AppGenerator\Gramer.xml");
+ doc.Load(@"C:\Users\Johny\AppGenerator\Gramer.xml");
 
  string myAppName = string.Empty;
  XmlNode myAppNameNode = doc.SelectSingleNode(@"gramer/app_name");
