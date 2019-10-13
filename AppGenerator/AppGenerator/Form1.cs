@@ -80,7 +80,7 @@ namespace AppGenerator
                     writer.WriteLine();
 
                     writer.RenderBeginTag(HtmlTextWriterTag.Title);
-                    writer.Write("Page Title" + pageList[y]);
+                    writer.Write(pageList[y]);
                     writer.RenderEndTag(); //end title
                     writer.WriteLine();
 
@@ -98,7 +98,7 @@ namespace AppGenerator
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, "header");
                     writer.RenderBeginTag(HtmlTextWriterTag.Div);
                     writer.RenderBeginTag(HtmlTextWriterTag.H1);
-                    writer.Write("My WebSite");
+                    writer.Write(myAppName);
                     writer.RenderEndTag(); //end div
                     writer.RenderEndTag(); //end h1
                     writer.WriteLine();

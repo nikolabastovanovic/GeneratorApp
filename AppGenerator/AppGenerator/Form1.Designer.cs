@@ -41,7 +41,7 @@
             // 
             this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(274, 168);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 0;
@@ -116,9 +116,9 @@
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "StaticAppGenerator";
-            this.Text = "Form1";
+            this.Text = "Generator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormGenerator_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();

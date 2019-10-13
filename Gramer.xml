@@ -1,6 +1,6 @@
 <gramer>
-	<app_name>GeneratedStaticApp</app_name>
-	<banner_image>C:\Users\nikola.bastovanovic\source\repos\GeneratedDinamicWebSite\GeneratedDinamicWebSite\Images\BannerCar.jpg</banner_image>
+	<app_name>MyGeneratedApp</app_name>
+	<banner_image>https://www.justkampersinsurance.com/media/wysiwyg_gallery/Insurance/Hayburner/Daily-Driver-Banner.jpg</banner_image>
 	<db_name>Garage</db_name>
 	<tables>
 		<table>
@@ -32,7 +32,7 @@
 	</tables>
 	<pages>
 		<page>
-			<pageName>Home</pageName>
+			<pageName index="true">Home</pageName>
 			<pageDescription>
 				<description>Ovo je opis Home ImageSource("https://www.w3schools.com/images/w3schools_green.jpg") stranice</description>
 				<description>Ovo je opis Home stranice koji ce se nalaziti u sledecem paragrafu. Svaki description tag je tag koji odvaja sledeci tekst u novi paragraf.</description>

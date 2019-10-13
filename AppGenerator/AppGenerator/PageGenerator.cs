@@ -12,10 +12,9 @@ namespace AppGenerator
 {
     class PageGenerator
     {
-        public static string PagesDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages";
-        public static void GeneratePagesByModel(string myAppName, XmlDocument xmlDocument, string csprojPath)
+        public static void GeneratePagesByModel(string myAppName, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
-
+            string PagesDirPath = fileNamePath + @"\Pages";
             if (Directory.Exists(PagesDirPath) == false)
             {
                 Directory.CreateDirectory(PagesDirPath);
@@ -115,9 +114,9 @@ namespace AppGenerator
             }
         }
 
-        public static void GenrateClassByModel(string myAppName, XmlDocument xmlDocument, string csprojPath)
+        public static void GenrateClassByModel(string myAppName, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
-            string PagesDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages";
+            string PagesDirPath = fileNamePath + @"\Pages";
             XmlNode dbNameNode = xmlDocument.SelectSingleNode(@"gramer/db_name");
             string dbName = dbNameNode.InnerText; //Naziv baze
 
@@ -198,7 +197,7 @@ namespace {myAppName}.Pages
             }
         }
 
-        public static void GenerateAdminPage(string myAppName, XmlDocument xmlDocument, string csprojPath)
+        public static void GenerateAdminPage(string myAppName, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
             string adminPageString = string.Empty;
             string adminPageClassString = string.Empty;
@@ -449,7 +448,7 @@ namespace {myAppName}.Pages
             adminPageString = adminPageString.Replace("&lt;", "<");
 
             #region Generate Admin.aspx page
-            string adminPagePath = PagesDirPath + @"\Admin.aspx";
+            string adminPagePath = fileNamePath + @"\Pages\Admin.aspx";
             if (File.Exists(adminPagePath))
             {
                 File.Delete(adminPagePath);
@@ -495,7 +494,7 @@ namespace {myAppName}.Pages
 }}";
 
             #region Generate Admin.aspx.cs page
-            string adminPageClassPath = PagesDirPath + @"\Admin.aspx.cs";
+            string adminPageClassPath = fileNamePath + @"\Pages\Admin.aspx.cs";
             if (File.Exists(adminPageClassPath))
             {
                 File.Delete(adminPageClassPath);
@@ -524,7 +523,7 @@ namespace {myAppName}.Pages
             #endregion
 
             #region Generate Admin.aspx.designer.cs
-            string adminPageDesignerPath = PagesDirPath + @"\Admin.aspx.designer.cs";
+            string adminPageDesignerPath = fileNamePath + @"\Pages\Admin.aspx.designer.cs";
             if (File.Exists(adminPageDesignerPath))
             {
                 File.Delete(adminPageDesignerPath);
@@ -552,7 +551,7 @@ namespace {myAppName}.Pages
             #endregion
         }
 
-        public static void GenerateIndexPage(string myApp, XmlDocument xmlDocument, string csprojPath)
+        public static void GenerateIndexPage(string myApp, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
             string generatedIndexPageString = string.Empty;
             string generatedIndexPageClassString = string.Empty;
@@ -603,7 +602,7 @@ namespace {myAppName}.Pages
                 writer.WriteLine();
             }
             generatedIndexPageString += stringWriter.ToString();
-            string indexPagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Index.aspx";
+            string indexPagePath = fileNamePath + @"\Index.aspx";
             string csprojEdited = File.ReadAllText(csprojPath);
             int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
             string stringToInsert = $@"<Content Include=""Index.aspx"" />";
@@ -710,7 +709,7 @@ namespace {myApp}
                 }
             }
 
-            string indexPageClassPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Index.aspx.cs";
+            string indexPageClassPath = fileNamePath + @"\Index.aspx.cs";
             insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
             stringToInsert = $@"<Compile Include=""Index.aspx.cs"">" + "\n" +
   $@"<DependentUpon>Index.aspx</DependentUpon>
@@ -739,7 +738,7 @@ namespace {myApp} {{
                     }
                 }
             }
-            string indexPageDesignerPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Index.aspx.designer.cs";
+            string indexPageDesignerPath = fileNamePath + @"\Index.aspx.designer.cs";
             stringToInsert = $@"<Compile Include=""Index.aspx.designer.cs"">" + "\n" +
   $@"<DependentUpon>Index.aspx</DependentUpon>" + "\n" +
 @"</Compile> " + Environment.NewLine + "\n\t";
@@ -747,7 +746,7 @@ namespace {myApp} {{
             #endregion
         }
 
-        public static void GeneratePageItem(string myApp, XmlDocument xmlDocument, string csprojPath)
+        public static void GeneratePageItem(string myApp, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
             string generatedItemPageString = string.Empty;
             string generatedItemPageClassString = string.Empty;
@@ -766,7 +765,7 @@ namespace {myApp} {{
                     if (xmlNodeTableName.Attributes["index"].Value == "true")
                     {
                         itemModelName = xmlNodeTableName.InnerText;
-                        itemPagePath = $@"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\{itemModelName}Item.aspx";
+                        itemPagePath = fileNamePath + $@"\Pages\{itemModelName}Item.aspx";
                         stringToInsert = $@"<Content Include=""Pages\{itemModelName}Item.aspx"" />";
                     }
                 }
@@ -1029,7 +1028,7 @@ namespace {myApp}
     }}
 }}";
 
-            itemPagePath = $@"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\{itemModelName}Item.aspx.cs";
+            itemPagePath = fileNamePath + $@"\Pages\{itemModelName}Item.aspx.cs";
             insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
             stringToInsert = $@"<Compile Include=""Pages\{itemModelName}Item.aspx.cs"">" + "\n" +
   $@"<DependentUpon>{itemModelName}Item.aspx</DependentUpon>
@@ -1040,12 +1039,12 @@ namespace {myApp}
             stringToInsert = $@"<Compile Include=""Pages\{itemModelName}Item.aspx.designer.cs"">" + "\n" +
   $@"<DependentUpon>{itemModelName}Item.aspx</DependentUpon>" + "\n" +
 @"</Compile> " + Environment.NewLine + "\n\t";
-            itemPagePath = $@"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\{itemModelName}Item.aspx.designer.cs";
+            itemPagePath = fileNamePath + $@"\Pages\{itemModelName}Item.aspx.designer.cs";
             csprojEdited = EditCSProj.IncludePages(itemPagePath, generatedItemPageDesignerString, csprojPath, insertStartPosition, stringToInsert);
             #endregion
         }
 
-        public static void GenerateRegisterPage(string myApp, XmlDocument xmlDocument, string csprojPath)
+        public static void GenerateRegisterPage(string myApp, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
             string generatedRegisterString = string.Empty;
             string generatedRegisterClassString = string.Empty;
@@ -1126,7 +1125,7 @@ namespace {myApp}
                 writer.WriteLine();
             }
             generatedRegisterString = stringWriter.ToString();
-            pagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Register.aspx";
+            pagePath = fileNamePath + @"\Pages\Account\Register.aspx";
             string csprojEdited = File.ReadAllText(csprojPath);
             int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
             stringToInsert = $@"<Content Include=""Pages\Account\Register.aspx"" />";
@@ -1146,7 +1145,7 @@ namespace {myApp}.Pages.Account {{
         protected global::System.Web.UI.WebControls.Button btnRegister;
     }}
 }}";
-            pagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Register.aspx.designer.cs";
+            pagePath = fileNamePath + @"\Pages\Account\Register.aspx.designer.cs";
             insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
             stringToInsert = $@"<Compile Include=""Pages\Account\Register.aspx.designer.cs"">" + "\n" +
   $@"<DependentUpon>Register.aspx</DependentUpon>" + "\n" +
@@ -1220,7 +1219,7 @@ namespace {myApp}.Pages.Account
         }}
     }}
 }}";
-            pagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Register.aspx.cs";
+            pagePath = fileNamePath + @"\Pages\Account\Register.aspx.cs";
             insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
             stringToInsert = $@"<Compile Include=""Pages\Account\Register.aspx.cs"">" + "\n" +
   $@"<DependentUpon>Register.aspx</DependentUpon>
@@ -1231,7 +1230,7 @@ namespace {myApp}.Pages.Account
             #endregion
 
             string startup = string.Empty;
-            string startupPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Startup.cs";
+            string startupPath = fileNamePath + @"\Startup.cs";
             stringToInsert = @"<Compile Include=""Startup.cs"" />";
             startup = $@"using System;
 using System.Threading.Tasks;
@@ -1259,7 +1258,7 @@ namespace {myApp}
             csprojEdited = EditCSProj.IncludePages(startupPath, startup, csprojPath, insertStartPosition, stringToInsert);
         }
 
-        public static void GenerateLogInPage(string myApp, XmlDocument xmlDocument, string csprojPath)
+        public static void GenerateLogInPage(string myApp, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
         {
             string generatedRegisterString = string.Empty;
             string generatedRegisterClassString = string.Empty;
@@ -1327,7 +1326,7 @@ namespace {myApp}
                 writer.WriteLine();
             }
             generatedRegisterString = stringWriter.ToString();
-            pagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Login.aspx";
+            pagePath = fileNamePath + @"\Pages\Account\Login.aspx";
             string csprojEdited = File.ReadAllText(csprojPath);
             int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
             stringToInsert = $@"<Content Include=""Pages\Account\Login.aspx"" />";
@@ -1346,7 +1345,7 @@ namespace {myApp}.Pages.Account {{
         protected global::System.Web.UI.WebControls.Button btnLogIn;
     }}
 }}";
-            pagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Login.aspx.designer.cs";
+            pagePath = fileNamePath + @"\Pages\Account\Login.aspx.designer.cs";
             insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
             stringToInsert = $@"<Compile Include=""Pages\Account\Login.aspx.designer.cs"">" + "\n" +
   $@"<DependentUpon>Login.aspx</DependentUpon>" + "\n" +
@@ -1408,7 +1407,7 @@ namespace {myApp}.Pages.Account
         }}
     }}
 }}";
-            pagePath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account\Login.aspx.cs";
+            pagePath = fileNamePath + @"\Pages\Account\Login.aspx.cs";
             insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
             stringToInsert = $@"<Compile Include=""Pages\Account\Login.aspx.cs"">" + "\n" +
   $@"<DependentUpon>Login.aspx</DependentUpon>
@@ -1417,6 +1416,124 @@ namespace {myApp}.Pages.Account
 
             csprojEdited = EditCSProj.IncludePages(pagePath, generatedRegisterClassString, csprojPath, insertStartPosition, stringToInsert);
             #endregion
+        }
+
+        public static void GenerateNavigationPages(string myApp, XmlDocument xmlDocument, string csprojPath, string fileNamePath)
+        {
+            string generatedNavigationString = string.Empty;
+            string generatedNavigationClassString = string.Empty;
+            string generatedNavigationDesignerString = string.Empty;
+
+            string pagePath = string.Empty;
+            string stringToInsert = string.Empty;
+            string pageName = string.Empty;
+
+            foreach (XmlNode xmlNodePageName in xmlDocument.GetElementsByTagName("pageName"))
+            {
+                if (xmlNodePageName.Attributes["index"] == null)
+                {
+                    generatedNavigationString = string.Empty;
+                    pageName = xmlNodePageName.InnerText;
+                    pageName = pageName.Replace(" ", string.Empty);
+                    StringBuilder sb = new StringBuilder($@"<%@ Page Title="""" Language=""C#"" MasterPageFile=""~/MasterPage.Master"" AutoEventWireup=""true"" CodeBehind=""{pageName}.aspx.cs"" Inherits=""{myApp}.Pages.{pageName}"" %>" + "\n");
+                    StringWriter stringWriter = new StringWriter(sb);
+
+                    using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
+                    {
+                        writer.AddAttribute("ID", "Content1");
+                        writer.AddAttribute("ContentPlaceHolderID", "head");
+                        writer.AddAttribute("runat", "server");
+                        writer.RenderBeginTag("asp:Content");
+                        writer.RenderEndTag(); //End asp:Content tag
+                        writer.WriteLine();
+
+                        writer.AddAttribute("ID", "Content2");
+                        writer.AddAttribute("ContentPlaceHolderID", "ContentPlaceHolder1");
+                        writer.AddAttribute("runat", "server");
+                        writer.RenderBeginTag("asp:Content");
+
+                        writer.AddAttribute(HtmlTextWriterAttribute.Style, "text-align:center");
+                        writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                        writer.WriteLine("<br />");
+                        writer.WriteLine("<br />");
+
+                        foreach (XmlNode xmlNodePageDescription in xmlDocument.GetElementsByTagName("description"))
+                        {
+                            //Ostavljeno poredjenje preko xmlNode-ova jer neki od naziva stranica moze se sastojati iz vise reci
+                            //Primer za to - About us
+                            if (xmlNodePageDescription.ParentNode.ParentNode.FirstChild.InnerText == xmlNodePageName.InnerText)
+                            {
+                                writer.RenderBeginTag(HtmlTextWriterTag.P);
+
+                                string imageSource = string.Empty;
+                                if (xmlNodePageDescription.InnerText.Contains("ImageSource"))
+                                {
+                                    imageSource = xmlNodePageDescription.InnerText.Substring(xmlNodePageDescription.InnerText.IndexOf("ImageSource(") + 13, xmlNodePageDescription.InnerText.IndexOf(")") - (xmlNodePageDescription.InnerText.IndexOf("ImageSource(") + 14));
+                                    xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Replace("\"" + imageSource + "\"", " ");
+                                    xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Insert(xmlNodePageDescription.InnerText.IndexOf("ImageSource(") + 13, "<img src=" + "\"" + imageSource + "\"" + "/>");
+                                    xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Replace("ImageSource(", " ");
+                                    xmlNodePageDescription.InnerText = xmlNodePageDescription.InnerText.Replace(")", " ");
+                                }
+
+                                writer.WriteLine(xmlNodePageDescription.InnerText);
+                                writer.RenderEndTag(); //End p tag
+                                writer.WriteLine();
+                            }
+                        }
+
+                        writer.RenderEndTag(); //End div tag
+                        writer.WriteLine();
+                        writer.RenderEndTag(); //End asp:Content tag
+                        writer.WriteLine();
+                    }
+
+                    generatedNavigationString = stringWriter.ToString();
+
+                    pagePath = fileNamePath + $@"\Pages\{pageName}.aspx";
+                    string csprojEdited = File.ReadAllText(csprojPath);
+                    int insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
+                    stringToInsert = $@"<Content Include=""Pages\{pageName}.aspx"" />";
+
+                    csprojEdited = EditCSProj.IncludePages(pagePath, generatedNavigationString, csprojPath, insertStartPosition, stringToInsert);
+
+                    generatedNavigationClassString = $@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace {myApp}.Pages
+{{
+    public partial class {pageName} : System.Web.UI.Page
+    {{
+        protected void Page_Load(object sender, EventArgs e)
+        {{
+
+        }}
+    }}
+}}
+";
+
+                    pagePath = fileNamePath + $@"\Pages\{pageName}.aspx.cs";
+                    insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+                    stringToInsert = $@"<Compile Include=""Pages\{pageName}.aspx.cs"">" + "\n" +
+          $@"<DependentUpon>{pageName}.aspx</DependentUpon>
+       <SubType>ASPXCodeBehind</SubType>
+     </Compile>" + Environment.NewLine + "\n\t";
+
+                    csprojEdited = EditCSProj.IncludePages(pagePath, generatedNavigationClassString, csprojPath, insertStartPosition, stringToInsert);
+
+                    pagePath = fileNamePath + $@"\Pages\{pageName}.aspx.designer.cs";
+                    insertStartPosition = csprojEdited.IndexOf(@"<Compile Include=""Properties\AssemblyInfo.cs""");
+                    stringToInsert = $@"<Compile Include=""Pages\{pageName}.aspx.designer.cs"">" + "\n" +
+          $@"<DependentUpon>{pageName}.aspx</DependentUpon>" + "\n" +
+        @"</Compile> " + Environment.NewLine + "\n\t";
+
+                    csprojEdited = EditCSProj.IncludePages(pagePath, generatedNavigationDesignerString, csprojPath, insertStartPosition, stringToInsert);
+                }
+            }
         }
     }
 }

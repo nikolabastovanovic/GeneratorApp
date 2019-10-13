@@ -24,6 +24,32 @@ namespace AppGenerator
             InitializeComponent();
         }
 
+        public string filename = string.Empty;
+        public string grammer = string.Empty;
+
+        private void BtnBrowseGrammer_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "XML Files (*.xml)|*.xml";
+            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                grammer = openFile.FileName;
+            }
+            txtGrammer.Text = grammer;
+            btnBrowsePath.Enabled = true;
+        }
+
+        private void BtnBrowsePath_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folder = new FolderBrowserDialog();
+            if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            { 
+                filename = folder.SelectedPath;
+            }
+            txtSourceCodeDest.Text = filename;
+            btnGenerate.Enabled = true;
+        }
+
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
             var proces = new Process
@@ -40,7 +66,7 @@ namespace AppGenerator
 
 
             #region Update csproj fajla
-            string csprojPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MyGeneratedApp.csproj";
+            string csprojPath = filename + @"\MyGeneratedApp.csproj";
             string csprojEdited = File.ReadAllText(csprojPath);
 
             //Dodavanje MasterPage.Master strane u .csproj
@@ -75,20 +101,27 @@ namespace AppGenerator
 
             List<string> pageList = new List<string>();
             XmlDocument xml = new XmlDocument();
-            xml.Load(@"C:\Users\Johny\AppGenerator\Gramer.xml");
+            xml.Load(grammer);
             foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
             }
             string myAppName = string.Empty;
             string bannerImagePath = string.Empty;
+            string indexPage = string.Empty;
             XmlNode myAppNameNode = xml.SelectSingleNode(@"gramer/app_name");
             myAppName = myAppNameNode.InnerText; //Naziv aplikacije
             XmlNode bannerImagePathNode = xml.SelectSingleNode(@"gramer/banner_image");
             bannerImagePath = bannerImagePathNode.InnerText;
 
+            foreach (XmlNode xmlNodeIndexPage in xml.GetElementsByTagName("pageName"))
+            {
+                if (xmlNodeIndexPage.Attributes["index"] != null && xmlNodeIndexPage.Attributes["index"].Value == "true")
+                    indexPage = xmlNodeIndexPage.InnerText;
+            }
+
             #region Generisanje MasterPage.Master strane
-            string pathMaster = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master";
+            string pathMaster = filename + @"\MasterPage.Master";
 
             string generatedMasterPageString = $@"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""{myAppName}.Site1"" %>
 <!DOCTYPE html>
@@ -112,7 +145,10 @@ namespace AppGenerator
 
             for (int i = 0; i < pageList.Count; i++)
             {
-                generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + @" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+                if (pageList[i] == indexPage)
+                    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + $@" NavigateUrl=""~ /Index.aspx"" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+                else
+                    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + $@" NavigateUrl=""~/Pages/{pageList[i].Replace(" ", string.Empty)}.aspx"" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
             }
             generatedMasterPageString = generatedMasterPageString +
                                       @"<li style=""float:right"">
@@ -153,7 +189,7 @@ namespace AppGenerator
             #endregion
 
             #region Generisanje MasterPage.Master.designer.cs klase
-            string pathMasterDesinger = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.designer.cs";
+            string pathMasterDesinger = filename + @"\MasterPage.Master.designer.cs";
 
             string generatedMasterDesignerString = @"namespace MyGeneratedApp {
     
@@ -188,7 +224,7 @@ namespace AppGenerator
             #endregion
 
             #region Generisanje MasterPage.Master.cs klase
-            string pathMasterCs = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\MasterPage.Master.cs";
+            string pathMasterCs = filename + @"\MasterPage.Master.cs";
 
             string generatedMasterCsString = @"using System;
 using System.Collections.Generic;
@@ -417,8 +453,8 @@ a:visited {
 
 ";
 
-            string styleDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Styles";
-            string cssPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Styles\StyleSheet.css";
+            string styleDirPath = filename + @"\Styles";
+            string cssPath = filename + @"\Styles\StyleSheet.css";
 
             //Kreiranje foldera Styles za smestanje css fajla
             if (!Directory.Exists(styleDirPath))
@@ -451,7 +487,7 @@ a:visited {
             #endregion
 
 
-            string imagesDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Images";
+            string imagesDirPath = filename + @"\Images";
             if (!Directory.Exists(imagesDirPath))
             {
                 Directory.CreateDirectory(imagesDirPath);
@@ -464,7 +500,7 @@ a:visited {
                 File.WriteAllText(csprojPath, csprojEdited);
             }
 
-            string modelsDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Models";
+            string modelsDirPath = filename + @"\Models";
             if (!Directory.Exists(modelsDirPath))
             {
                 Directory.CreateDirectory(modelsDirPath);
@@ -472,25 +508,27 @@ a:visited {
 
             CRUDOperations.DbOperations(myAppName, xml, modelsDirPath, csprojPath);
 
-            PageGenerator.GeneratePagesByModel(myAppName, xml, csprojPath);
+            PageGenerator.GeneratePagesByModel(myAppName, xml, csprojPath, filename);
 
-            PageGenerator.GenrateClassByModel(myAppName, xml, csprojPath);
+            PageGenerator.GenrateClassByModel(myAppName, xml, csprojPath, filename);
 
-            PageGenerator.GenerateAdminPage(myAppName, xml, csprojPath);
+            PageGenerator.GenerateAdminPage(myAppName, xml, csprojPath, filename);
 
-            PageGenerator.GenerateIndexPage(myAppName, xml, csprojPath);
+            PageGenerator.GenerateIndexPage(myAppName, xml, csprojPath, filename);
 
-            PageGenerator.GeneratePageItem(myAppName, xml, csprojPath);
+            PageGenerator.GeneratePageItem(myAppName, xml, csprojPath, filename);
 
-            string acountDirPath = @"C:\Users\Johny\source\repos\MyGeneratedApp\MyGeneratedApp\Pages\Account";
+            string acountDirPath = filename + @"\Pages\Account";
             if (!Directory.Exists(acountDirPath))
             {
                 Directory.CreateDirectory(acountDirPath);
             }
 
-            PageGenerator.GenerateRegisterPage(myAppName, xml, csprojPath);
+            PageGenerator.GenerateRegisterPage(myAppName, xml, csprojPath, filename);
 
-            PageGenerator.GenerateLogInPage(myAppName, xml, csprojPath);
+            PageGenerator.GenerateLogInPage(myAppName, xml, csprojPath, filename);
+
+            PageGenerator.GenerateNavigationPages(myAppName, xml, csprojPath, filename);
         }
     }
 }

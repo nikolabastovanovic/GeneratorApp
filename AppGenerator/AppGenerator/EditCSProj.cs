@@ -30,7 +30,6 @@ namespace AppGenerator
 
             //Dodavanje aspx fajla u .csproj
             string csprojEdited = File.ReadAllText(csprojPath);
-            //insertStartPosition = csprojEdited.IndexOf(@"<Content Include=""Web.config""");
             if (csprojEdited.Contains(checkIfContains) == false) //Proveri da li aspx postoji u .csproj
             {
                 csprojEdited = csprojEdited.Insert(insertStartPosition, stringToInsert + Environment.NewLine + "\t");
