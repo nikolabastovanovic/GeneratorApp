@@ -64,9 +64,14 @@ namespace AppGenerator
             proces.Start();
             proces.WaitForExit();
 
+            string AppName = string.Empty;
+            XmlDocument xml = new XmlDocument();
+            xml.Load(grammer);
+            XmlNode AppNameNode = xml.SelectSingleNode(@"gramer/app_name");
+            AppName = AppNameNode.InnerText; //Naziv aplikacije
 
             #region Update csproj fajla
-            string csprojPath = filename + @"\MyGeneratedApp.csproj";
+            string csprojPath = filename + @"\" + AppName + ".csproj";
             string csprojEdited = File.ReadAllText(csprojPath);
 
             //Dodavanje MasterPage.Master strane u .csproj
@@ -100,8 +105,7 @@ namespace AppGenerator
             #endregion
 
             List<string> pageList = new List<string>();
-            XmlDocument xml = new XmlDocument();
-            xml.Load(grammer);
+           
             foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike

@@ -1,6 +1,8 @@
 <gramer>
-	<app_name>MyGeneratedApp</app_name>
-	<banner_image>https://www.justkampersinsurance.com/media/wysiwyg_gallery/Insurance/Hayburner/Daily-Driver-Banner.jpg</banner_image>
+	<app_name>DinamicTest</app_name>
+	<banner_image>
+	https://www.justkampersinsurance.com/media/wysiwyg_gallery/Insurance/Hayburner/Daily-Driver-Banner.jpg
+	</banner_image>
 	<db_name>Garage</db_name>
 	<tables>
 		<table>
@@ -37,7 +39,7 @@
 				<description>Ovo je opis Home ImageSource("https://www.w3schools.com/images/w3schools_green.jpg") stranice</description>
 				<description>Ovo je opis Home stranice koji ce se nalaziti u sledecem paragrafu. Svaki description tag je tag koji odvaja sledeci tekst u novi paragraf.</description>
 				<description>Ovo je takodje dodatak Home stranici koji ce kao i prethodni biti sadrzan u novom paragrafu.</description>
-				<description><img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" /></description>
+				<description><img src="https://www.justkampersinsurance.com/media/wysiwyg_gallery/Insurance/Hayburner/Daily-Driver-Banner.jpg"/></description>
 				<sideBarDesc>
 				Sadrzaj koji se unese u ovaj tag, nalazice se u Side-bar-u stranice.
 				Ukoliko se desi da stranica nema ovaj tag, generator ce to prepoznati i nece kreirati side bar na toj stranici.
