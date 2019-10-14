@@ -118,7 +118,7 @@
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "StaticAppGenerator";
-            this.Text = "Generator";
+            this.Text = "StaticAppGenerator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormGenerator_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
