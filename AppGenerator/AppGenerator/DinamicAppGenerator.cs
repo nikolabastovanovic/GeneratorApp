@@ -177,7 +177,8 @@ namespace AppGenerator
 
                 writer.AddAttribute("ID", "Image1");
                 writer.AddAttribute("runat", "server");
-                writer.AddAttribute("ImageUrl", "\"" + bannerImagePath + " Width=100%");
+                writer.AddAttribute("ImageUrl", bannerImagePath);
+                writer.AddAttribute("Width", "100%");
                 writer.RenderBeginTag("asp:Image");
                 writer.RenderEndTag(); //End asp:Image tag
                 writer.WriteLine();
@@ -255,9 +256,9 @@ namespace AppGenerator
                 writer.AddAttribute("ID", "lnkLogout");
                 writer.AddAttribute("runat", "server");
                 writer.AddAttribute("OnClick", "lnkLogout_Click");
-                writer.RenderBeginTag("asp:HyperLink");
+                writer.RenderBeginTag("asp:LinkButton");
                 writer.Write("LogOut");
-                writer.RenderEndTag(); //End asp:HyperLink tag
+                writer.RenderEndTag(); //End asp:LinkButton tag
                 writer.WriteLine();
 
                 writer.RenderEndTag(); //End li tag
