@@ -1,12 +1,12 @@
  
-using DinamicTest;
+using GeneratedDinamicWebSite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 
-namespace DinamicTest.Models
+namespace GeneratedDinamicWebSite.Models
 {
 	public partial class ProductModel 
 	{

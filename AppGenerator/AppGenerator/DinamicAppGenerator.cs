@@ -14,6 +14,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TextTemplating;
 using System.Web;
+using System.Web.UI;
 
 namespace AppGenerator
 {
@@ -105,7 +106,7 @@ namespace AppGenerator
             #endregion
 
             List<string> pageList = new List<string>();
-           
+
             foreach (XmlNode node in xml.GetElementsByTagName("pageName"))
             {
                 pageList.Add(node.InnerText); //Nazivi stranica pokupljen iz gramatike
@@ -127,53 +128,220 @@ namespace AppGenerator
             #region Generisanje MasterPage.Master strane
             string pathMaster = filename + @"\MasterPage.Master";
 
-            string generatedMasterPageString = $@"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""{myAppName}.Site1"" %>
-<!DOCTYPE html>
+            StringBuilder sb = new StringBuilder($@"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""{myAppName}.Site1"" %>
+<!DOCTYPE html>" + Environment.NewLine);
+            StringWriter stringWriter = new StringWriter(sb);
 
-<html>
-  <head runat=""server"">
-    <title>" + myAppName + @"</title>
-    <link rel=""stylesheet"" href=""Styles/StyleSheet.css"" type=""text/css""/>
-    <asp:ContentPlaceHolder ID = ""head"" runat = ""server"">
-    </asp:ContentPlaceHolder>
-  </head>
-    <body>
-        <form id = ""form1"" runat = ""server"">
-           <div>
-               <div id=""wrapper"">
-                   <div id = ""banner"">
-                       <asp:Image ID = ""Image1"" runat = ""server"" ImageUrl = """ + bannerImagePath + @""" Width = ""100%"" />
-                           </div>
-                               <div id = ""navigation"">
-                                   <ul id = ""nav"">" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
-
-            for (int i = 0; i < pageList.Count; i++)
+            using (HtmlTextWriter writer = new HtmlTextWriter(stringWriter))
             {
-                if (pageList[i] == indexPage)
-                    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + $@" NavigateUrl=""~ /Index.aspx"" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
-                else
-                    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + $@" NavigateUrl=""~/Pages/{pageList[i].Replace(" ", string.Empty)}.aspx"" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+                writer.RenderBeginTag(HtmlTextWriterTag.Html);
+
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag(HtmlTextWriterTag.Head);
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Title);
+                writer.Write(myAppName);
+                writer.RenderEndTag(); //End title tag
+                writer.WriteLine();
+
+                writer.WriteBeginTag("link");
+                writer.WriteAttribute("rel", "stylesheet");
+                writer.WriteAttribute("href", "Styles/StyleSheet.css");
+                writer.WriteAttribute("type", "text/css");
+                writer.Write(HtmlTextWriter.SelfClosingTagEnd); //End link tag
+                writer.WriteLine();
+
+                writer.AddAttribute("ID", "head");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:ContentPlaceHolder");
+                writer.RenderEndTag(); //End asp:ContentPlaceHolder tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End head tag
+                writer.WriteLine();
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Body);
+
+                writer.AddAttribute("id", "form1");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag(HtmlTextWriterTag.Form);
+
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, "wrapper");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, "banner");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                writer.AddAttribute("ID", "Image1");
+                writer.AddAttribute("runat", "server");
+                writer.AddAttribute("ImageUrl", "\"" + bannerImagePath + " Width=100%");
+                writer.RenderBeginTag("asp:Image");
+                writer.RenderEndTag(); //End asp:Image tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End banner div tag
+                writer.WriteLine();
+
+                writer.AddAttribute("id", "navigation");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+
+                writer.AddAttribute("id", "nav");
+                writer.RenderBeginTag(HtmlTextWriterTag.Ul);
+
+                for (int i = 0; i < pageList.Count; i++)
+                {
+                    if (pageList[i] == indexPage)
+                    {
+                        writer.RenderBeginTag(HtmlTextWriterTag.Li);
+                        writer.AddAttribute("ID", "HyperLink" + i.ToString());
+                        writer.AddAttribute("NavigateUrl", "~/Index.aspx");
+                        writer.AddAttribute("runat", "server");
+                        writer.RenderBeginTag("asp:HyperLink");
+                        writer.Write(pageList[i]);
+                        writer.RenderEndTag(); //End asp:HyperLink tag
+                        writer.WriteLine();
+                        writer.RenderEndTag(); //End li tag
+                        writer.WriteLine();
+                    }
+                    else
+                    {
+                        writer.RenderBeginTag(HtmlTextWriterTag.Li);
+                        writer.AddAttribute("ID", "HyperLink" + i.ToString());
+                        writer.AddAttribute("NavigateUrl", $"~/Pages/{pageList[i].Replace(" ", string.Empty)}.aspx");
+                        writer.AddAttribute("runat", "server");
+                        writer.RenderBeginTag("asp:HyperLink");
+                        writer.Write(pageList[i]);
+                        writer.RenderEndTag(); //End asp:HyperLink tag
+                        writer.WriteLine();
+                        writer.RenderEndTag(); //End li tag
+                        writer.WriteLine();
+                    }
+                }
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "float:right");
+                writer.RenderBeginTag(HtmlTextWriterTag.Li);
+
+                writer.AddAttribute("ID", "lnkRegister");
+                writer.AddAttribute("NavigateUrl", "~/Pages/Account/Register.aspx");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:HyperLink");
+                writer.Write("Register");
+                writer.RenderEndTag(); //End asp:HyperLink tag
+                writer.WriteLine();
+
+                writer.AddAttribute("ID", "litStatus");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:HyperLink");
+                writer.Write("LogIn");
+                writer.RenderEndTag(); //End asp:HyperLink tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End li tag
+                writer.WriteLine();
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Style, "float:right");
+                writer.RenderBeginTag(HtmlTextWriterTag.Li);
+
+                writer.AddAttribute("ID", "lnkLogin");
+                writer.AddAttribute("NavigateUrl", "~/Pages/Account/Login.aspx");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:HyperLink");
+                writer.Write("LogIn");
+                writer.RenderEndTag(); //End asp:HyperLink tag
+                writer.WriteLine();
+
+                writer.AddAttribute("ID", "lnkLogout");
+                writer.AddAttribute("runat", "server");
+                writer.AddAttribute("OnClick", "lnkLogout_Click");
+                writer.RenderBeginTag("asp:HyperLink");
+                writer.Write("LogOut");
+                writer.RenderEndTag(); //End asp:HyperLink tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End li tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End Ul tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End navigation div tag
+                writer.WriteLine();
+
+                writer.AddAttribute(HtmlTextWriterAttribute.Id, "content");
+                writer.RenderBeginTag(HtmlTextWriterTag.Div);
+                writer.AddAttribute("ID", "ContentPlaceHolder1");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:ContentPlaceHolder");
+                writer.RenderEndTag(); //End asp:ContentPlaceHolder tag
+                writer.WriteLine();
+                writer.RenderEndTag(); //End content div tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End wrapper div tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End div tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End form tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); //End body tag
+                writer.WriteLine();
+
+                writer.RenderEndTag(); // End html tag
             }
-            generatedMasterPageString = generatedMasterPageString +
-                                      @"<li style=""float:right"">
-                                            <asp:HyperLink ID=""lnkRegister"" NavigateUrl=""~/Pages/Account/Register.aspx"" runat=""server"">Register</asp:HyperLink>
-                                            <asp:HyperLink ID=""litStatus"" runat=""server"">Login</asp:HyperLink>
-                                        </li>
-                                        <li style=""float:right"">
-                                            <asp:HyperLink ID=""lnkLogin"" NavigateUrl=""~/Pages/Account/Login.aspx"" runat=""server"">LogIn</asp:HyperLink>
-                                            <asp:LinkButton ID=""lnkLogout"" runat=""server"" OnClick=""lnkLogout_Click"">LogOut</asp:LinkButton>
-                                        </li>
-                                    </ul>
-                               </div>
-                           <div id = ""content"">
-                       <asp:ContentPlaceHolder ID = ""ContentPlaceHolder1"" runat = ""server"">
-                       </asp:ContentPlaceHolder>
-                    </div>
-                </div>
-             </div>
-        </form>
-    </body>
- </html>";
+
+            string generatedMasterPageString = stringWriter.ToString();
+
+//            string generatedMasterPageString = $@"<%@ Master Language=""C#"" AutoEventWireup=""true"" CodeBehind=""MasterPage.master.cs"" Inherits=""{myAppName}.Site1"" %>
+//<!DOCTYPE html>
+
+//<html>
+//  <head runat=""server"">
+//    <title>" + myAppName + @"</title>
+//    <link rel=""stylesheet"" href=""Styles/StyleSheet.css"" type=""text/css""/>
+//    <asp:ContentPlaceHolder ID = ""head"" runat = ""server"">
+//    </asp:ContentPlaceHolder>
+//  </head>
+//    <body>
+//        <form id = ""form1"" runat = ""server"">
+//           <div>
+//               <div id=""wrapper"">
+//                   <div id = ""banner"">
+//                       <asp:Image ID = ""Image1"" runat = ""server"" ImageUrl = """ + bannerImagePath + @""" Width = ""100%"" />
+//                           </div>
+//                               <div id = ""navigation"">
+//                                   <ul id = ""nav"">" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+
+//            for (int i = 0; i < pageList.Count; i++)
+//            {
+//                if (pageList[i] == indexPage)
+//                    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + $@" NavigateUrl=""~ /Index.aspx"" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+//                else
+//                    generatedMasterPageString = generatedMasterPageString + @"<li><asp:HyperLink ID=""HyperLink" + i.ToString() + "\"" + $@" NavigateUrl=""~/Pages/{pageList[i].Replace(" ", string.Empty)}.aspx"" runat=""server"">" + pageList[i] + "</asp:HyperLink></li>" + Environment.NewLine + "\t\t\t\t\t\t\t\t\t\t";
+//            }
+//            generatedMasterPageString = generatedMasterPageString +
+//                                      @"<li style=""float:right"">
+//                                            <asp:HyperLink ID=""lnkRegister"" NavigateUrl=""~/Pages/Account/Register.aspx"" runat=""server"">Register</asp:HyperLink>
+//                                            <asp:HyperLink ID=""litStatus"" runat=""server"">Login</asp:HyperLink>
+//                                        </li>
+//                                        <li style=""float:right"">
+//                                            <asp:HyperLink ID=""lnkLogin"" NavigateUrl=""~/Pages/Account/Login.aspx"" runat=""server"">LogIn</asp:HyperLink>
+//                                            <asp:LinkButton ID=""lnkLogout"" runat=""server"" OnClick=""lnkLogout_Click"">LogOut</asp:LinkButton>
+//                                        </li>
+//                                    </ul>
+//                               </div>
+//                           <div id = ""content"">
+//                       <asp:ContentPlaceHolder ID = ""ContentPlaceHolder1"" runat = ""server"">
+//                       </asp:ContentPlaceHolder>
+//                    </div>
+//                </div>
+//             </div>
+//        </form>
+//    </body>
+// </html>";
 
             if (File.Exists(pathMaster))
             {
@@ -195,9 +363,9 @@ namespace AppGenerator
             #region Generisanje MasterPage.Master.designer.cs klase
             string pathMasterDesinger = filename + @"\MasterPage.Master.designer.cs";
 
-            string generatedMasterDesignerString = @"namespace MyGeneratedApp {
+            string generatedMasterDesignerString = $@"namespace {myAppName} {{
     
-    public partial class Site1 {
+    public partial class Site1 {{
         
         protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
@@ -206,8 +374,8 @@ namespace AppGenerator
         protected global::System.Web.UI.WebControls.HyperLink litStatus;
         protected global::System.Web.UI.WebControls.HyperLink lnkLogin;
         protected global::System.Web.UI.WebControls.LinkButton lnkLogout;
-    }
-}
+    }}
+}}
 ";
 
             if (File.Exists(pathMasterDesinger))
@@ -230,22 +398,22 @@ namespace AppGenerator
             #region Generisanje MasterPage.Master.cs klase
             string pathMasterCs = filename + @"\MasterPage.Master.cs";
 
-            string generatedMasterCsString = @"using System;
+            string generatedMasterCsString = $@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace MyGeneratedApp
-{
+namespace {myAppName}
+{{
     public partial class Site1 : System.Web.UI.MasterPage
-    {
+    {{
         protected void Page_Load(object sender, EventArgs e)
-        {
+        {{
             var user = Context.User.Identity;
             if (user.IsAuthenticated)
-            {
+            {{
                 litStatus.Text = Context.User.Identity.Name;
 
                 lnkLogin.Visible = false;
@@ -253,25 +421,25 @@ namespace MyGeneratedApp
 
                 lnkLogout.Visible = true;
                 litStatus.Visible = true;
-            }
+            }}
             else
-            {
+            {{
                 lnkLogin.Visible = true;
                 lnkRegister.Visible = true;
 
                 lnkLogout.Visible = false;
                 litStatus.Visible = false;
-            }
-        }
+            }}
+        }}
         protected void lnkLogout_Click(object sender, EventArgs e)
-        {
+        {{
             var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
             authenticationManager.SignOut();
 
             Response.Redirect(""~/Index.aspx"");
-        }
-    }
-}";
+        }}
+    }}
+}}";
 
             if (File.Exists(pathMasterCs))
             {
