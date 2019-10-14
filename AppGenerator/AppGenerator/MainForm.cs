@@ -15,11 +15,19 @@ namespace AppGenerator
         public MainForm()
         {
             InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
             StaticAppGenerator form = new StaticAppGenerator();
+            form.Show();
+            this.Hide();
+        }
+
+        private void BtnDinamicAppGen_Click(object sender, EventArgs e)
+        {
+            DinamicAppGenerator form = new DinamicAppGenerator();
             form.Show();
             this.Hide();
         }

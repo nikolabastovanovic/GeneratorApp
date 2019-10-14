@@ -41,10 +41,9 @@
             // btnGenerate
             // 
             this.btnGenerate.Enabled = false;
-            this.btnGenerate.Location = new System.Drawing.Point(268, 230);
-            this.btnGenerate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGenerate.Location = new System.Drawing.Point(201, 187);
             this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(100, 28);
+            this.btnGenerate.Size = new System.Drawing.Size(75, 23);
             this.btnGenerate.TabIndex = 0;
             this.btnGenerate.Text = "Generate";
             this.btnGenerate.UseVisualStyleBackColor = true;
@@ -53,50 +52,56 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(9, 7);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(154, 17);
+            this.label1.Size = new System.Drawing.Size(114, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Choose Your grammer:";
             // 
             // txtGrammer
             // 
-            this.txtGrammer.Location = new System.Drawing.Point(15, 29);
+            this.txtGrammer.Location = new System.Drawing.Point(11, 24);
+            this.txtGrammer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtGrammer.Name = "txtGrammer";
-            this.txtGrammer.Size = new System.Drawing.Size(614, 22);
+            this.txtGrammer.Size = new System.Drawing.Size(462, 20);
             this.txtGrammer.TabIndex = 2;
             // 
             // txtSourceCodeDest
             // 
-            this.txtSourceCodeDest.Location = new System.Drawing.Point(15, 116);
+            this.txtSourceCodeDest.Location = new System.Drawing.Point(11, 94);
+            this.txtSourceCodeDest.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtSourceCodeDest.Name = "txtSourceCodeDest";
-            this.txtSourceCodeDest.Size = new System.Drawing.Size(614, 22);
+            this.txtSourceCodeDest.Size = new System.Drawing.Size(462, 20);
             this.txtSourceCodeDest.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 96);
+            this.label2.Location = new System.Drawing.Point(9, 78);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(284, 17);
+            this.label2.Size = new System.Drawing.Size(213, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Choose generated source code destination:";
             // 
             // cbxGenerateDbScript
             // 
             this.cbxGenerateDbScript.AutoSize = true;
-            this.cbxGenerateDbScript.Location = new System.Drawing.Point(15, 191);
+            this.cbxGenerateDbScript.Location = new System.Drawing.Point(11, 155);
+            this.cbxGenerateDbScript.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbxGenerateDbScript.Name = "cbxGenerateDbScript";
-            this.cbxGenerateDbScript.Size = new System.Drawing.Size(195, 21);
+            this.cbxGenerateDbScript.Size = new System.Drawing.Size(149, 17);
             this.cbxGenerateDbScript.TabIndex = 5;
             this.cbxGenerateDbScript.Text = "Generate Database Script";
             this.cbxGenerateDbScript.UseVisualStyleBackColor = true;
             // 
             // btnBrowseGrammer
             // 
-            this.btnBrowseGrammer.Location = new System.Drawing.Point(239, 57);
+            this.btnBrowseGrammer.Location = new System.Drawing.Point(179, 46);
+            this.btnBrowseGrammer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnBrowseGrammer.Name = "btnBrowseGrammer";
-            this.btnBrowseGrammer.Size = new System.Drawing.Size(162, 24);
+            this.btnBrowseGrammer.Size = new System.Drawing.Size(122, 20);
             this.btnBrowseGrammer.TabIndex = 6;
             this.btnBrowseGrammer.Text = "Browse Grammer";
             this.btnBrowseGrammer.UseVisualStyleBackColor = true;
@@ -105,9 +110,10 @@
             // btnBrowsePath
             // 
             this.btnBrowsePath.Enabled = false;
-            this.btnBrowsePath.Location = new System.Drawing.Point(268, 144);
+            this.btnBrowsePath.Location = new System.Drawing.Point(201, 117);
+            this.btnBrowsePath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnBrowsePath.Name = "btnBrowsePath";
-            this.btnBrowsePath.Size = new System.Drawing.Size(100, 29);
+            this.btnBrowsePath.Size = new System.Drawing.Size(75, 24);
             this.btnBrowsePath.TabIndex = 7;
             this.btnBrowsePath.Text = "Browse";
             this.btnBrowsePath.UseVisualStyleBackColor = true;
@@ -115,9 +121,9 @@
             // 
             // DinamicAppGenerator
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(641, 271);
+            this.ClientSize = new System.Drawing.Size(481, 220);
             this.Controls.Add(this.btnBrowsePath);
             this.Controls.Add(this.btnBrowseGrammer);
             this.Controls.Add(this.cbxGenerateDbScript);
@@ -126,10 +132,10 @@
             this.Controls.Add(this.txtGrammer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnGenerate);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "DinamicAppGenerator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DinamicAppGenerator";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DinamicAppGenerator_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

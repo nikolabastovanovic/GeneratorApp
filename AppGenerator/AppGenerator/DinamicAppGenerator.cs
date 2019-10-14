@@ -23,6 +23,7 @@ namespace AppGenerator
         public DinamicAppGenerator()
         {
             InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
         public string filename = string.Empty;
@@ -701,6 +702,11 @@ a:visited {
             PageGenerator.GenerateLogInPage(myAppName, xml, csprojPath, filename);
 
             PageGenerator.GenerateNavigationPages(myAppName, xml, csprojPath, filename);
+        }
+
+        private void DinamicAppGenerator_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

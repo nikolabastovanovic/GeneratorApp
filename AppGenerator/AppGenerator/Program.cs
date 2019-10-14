@@ -17,7 +17,7 @@ namespace AppGenerator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DinamicAppGenerator());
+            Application.Run(new MainForm());
 
         }
     }
