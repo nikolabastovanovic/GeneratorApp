@@ -49,7 +49,7 @@ namespace AppGenerator
                         if (xmlNodeTableColumns.Attributes["fk"] != null && xmlNodeTableColumns.Attributes["fk"].Value != "")
                         {
                             generatedPagesString = generatedPagesString + "<p>\n" +
-                            $@"<asp:DropDownList ID=""ddl{modelColumnName}"" runat=""server"" DataSourceID=""SqlDataSource1"" DataTextField=""ID"" DataValueField = ""ID"" >
+                            $@"<asp:DropDownList ID=""ddl{modelColumnName}"" runat=""server"" DataSourceID=""SqlDataSource{modelColumnName}"" DataTextField=""ID"" DataValueField = ""ID"" >
              </asp:DropDownList>
               <asp:SqlDataSource ID=""SqlDataSource{modelColumnName}"" runat=""server"" ConnectionString=""<%$ ConnectionStrings:{dbName}ConnectionString %>"" SelectCommand = ""SELECT * FROM [{xmlNodeTableColumns.Attributes["fk"].Value}] ORDER BY [ID]""></asp:SqlDataSource>" + "\n</p>";
 

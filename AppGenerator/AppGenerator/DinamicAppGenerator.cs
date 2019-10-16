@@ -221,6 +221,20 @@ namespace AppGenerator
                         writer.WriteLine();
                     }
                 }
+                writer.WriteLine("<% if (litStatus.Text == \"admin\") %>");
+                writer.WriteLine("<% { %>");
+                writer.RenderBeginTag(HtmlTextWriterTag.Li);
+                writer.AddAttribute("ID", "lnkAdmin");
+                writer.AddAttribute("NavigateUrl", $"~/Pages/Admin.aspx");
+                writer.AddAttribute("runat", "server");
+                writer.RenderBeginTag("asp:HyperLink");
+                writer.Write("Admin");
+                writer.RenderEndTag(); //End asp:HyperLink tag
+                writer.WriteLine();
+                writer.RenderEndTag(); //End li tag
+                writer.WriteLine();
+                writer.WriteLine("<% } %>");
+
                 writer.AddAttribute(HtmlTextWriterAttribute.Style, "float:right");
                 writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
